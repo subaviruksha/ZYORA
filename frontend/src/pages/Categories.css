@@ -1,0 +1,256 @@
+* {
+    box-sizing: border-box;
+}
+
+.category-search {
+    width: 100%;
+    max-width: 500px;
+    margin: 25px auto 0;
+    position: relative;
+}
+
+.category-search input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 50px 14px 18px;
+    border: 1px solid #e3def5;
+    border-radius: 30px;
+    outline: none;
+    background: white;
+    color: #333;
+    font-size: 14px;
+}
+
+.category-search input:focus {
+    border-color: #6c3df4;
+}
+
+.category-search span {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+
+.no-category {
+    text-align: center;
+    margin: 50px 0;
+    color: #777;
+    font-size: 15px;
+}
+
+.categories-page {
+    min-height: 80vh;
+    padding: 70px 20px;
+    background: #faf9ff;
+}
+
+.categories-header {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 50px;
+    text-align: center;
+}
+
+.categories-header p {
+    color: #6c3df4;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin: 0 0 10px;
+}
+
+.categories-header h1 {
+    color: #222;
+    font-size: 40px;
+    margin: 0 0 12px;
+}
+
+.categories-header span {
+    color: #777;
+    font-size: 15px;
+}
+
+
+/* Category Grid */
+
+.categories-page .category-grid {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 25px;
+}
+
+
+/* Category Card */
+
+.categories-page .categories-card,
+.categories-page .categories-card:visited,
+.categories-page .categories-card:hover,
+.categories-page .categories-card:active {
+    width: 100%;
+    min-height: 340px;
+
+    background: white;
+    padding: 25px 15px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    border: 1px solid #eeeeee;
+    border-radius: 20px;
+
+    text-decoration: none;
+    color: inherit;
+
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.categories-page .categories-card:hover {
+    transform: translateY(-8px);
+    border-color: #dcd2ff;
+    box-shadow: 0 15px 35px rgba(108, 61, 244, 0.15);
+}
+
+
+/* Category Image */
+
+.categories-page .categories-card img {
+    width: 190px;
+    height: 190px;
+
+    object-fit: contain;
+
+    margin-bottom: 25px;
+
+    border-radius: 14px;
+
+    transition: 0.3s ease;
+}
+
+.categories-page .categories-card:hover img {
+    transform: scale(1.05);
+}
+
+
+/* Category Title */
+
+.categories-page .categories-card h3 {
+    color: #222;
+    font-size: 18px;
+    margin: 0 0 8px;
+}
+
+
+/* Category Description */
+
+.categories-page .categories-card p {
+    color: #777;
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+
+/* Tablet */
+
+@media (max-width: 1000px) {
+
+    .categories-page .category-grid {
+        width: min(800px, 100%);
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .categories-page .categories-card {
+        min-height: 330px;
+    }
+
+    .categories-page .categories-card img {
+        width: 170px;
+        height: 170px;
+    }
+}
+
+
+/* Mobile */
+
+@media (max-width: 650px) {
+
+    .categories-page {
+        padding: 50px 15px;
+    }
+
+    .categories-header {
+        margin-bottom: 35px;
+    }
+
+    .categories-header h1 {
+        font-size: 32px;
+    }
+
+    .categories-page .category-grid {
+        width: min(520px, 100%);
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .categories-page .categories-card {
+        min-height: 300px;
+        padding: 20px 12px;
+    }
+
+    .categories-page .categories-card img {
+        width: 145px;
+        height: 145px;
+        margin-bottom: 18px;
+    }
+
+    .categories-page .categories-card h3 {
+        font-size: 16px;
+    }
+
+    .categories-page .categories-card p {
+        font-size: 12px;
+    }
+}
+
+
+/* Small Mobile */
+
+@media (max-width: 420px) {
+
+    .categories-page {
+        padding: 40px 15px;
+    }
+
+    .categories-header h1 {
+        font-size: 28px;
+    }
+
+    .categories-header span {
+        font-size: 14px;
+    }
+
+    .categories-page .category-grid {
+        width: min(350px, 100%);
+        grid-template-columns: 1fr;
+    }
+
+    .categories-page .categories-card {
+        min-height: 320px;
+    }
+
+    .categories-page .categories-card img {
+        width: 180px;
+        height: 180px;
+    }
+}

@@ -1,0 +1,251 @@
+.password-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input input {
+    padding-right: 65px;
+}
+
+.password-input button {
+    position: absolute;
+    right: 12px;
+    border: none;
+    background: none;
+    color: #6c3df4;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.edit-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #e3def5;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.edit-field textarea:focus {
+    border-color: #6c3df4;
+}
+
+.saved-address {
+    background: #fbfaff;
+    border: 1px solid #f0ecff;
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+}
+
+.saved-address strong {
+    display: block;
+    color: #333;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.saved-address p {
+    margin: 6px 0;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.edit-details {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.edit-field label {
+    color: #555;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.edit-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #e3def5;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+}
+
+.edit-field input:focus {
+    border-color: #6c3df4;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.cancel-btn {
+    padding: 12px 22px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #555;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background: #f7f7f7;
+}
+
+
+.account-page {
+    min-height: 100vh;
+    background: #faf9ff;
+    padding: 50px 20px;
+}
+
+.account-container {
+    max-width: 850px;
+    margin: auto;
+}
+
+
+/* HEADER */
+
+.account-header {
+    margin-bottom: 35px;
+}
+
+.account-label {
+    margin: 0 0 8px;
+    color: #6c3df4;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.account-header h1 {
+    margin: 0;
+    color: #222;
+    font-size: 38px;
+    font-weight: 700;
+}
+
+.account-header > p:last-child {
+    margin-top: 8px;
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* CARD */
+
+.account-card {
+    background: white;
+    border: 1px solid #eeeaff;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 30px rgba(108, 61, 244, 0.06);
+}
+
+.account-card h2 {
+    margin: 0 0 22px;
+    color: #222;
+    font-size: 20px;
+}
+
+
+/* DETAILS */
+
+.account-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.detail-item {
+    padding: 15px;
+    background: #fbfaff;
+    border: 1px solid #f0ecff;
+    border-radius: 12px;
+}
+
+.detail-item span {
+    display: block;
+    margin-bottom: 6px;
+    color: #999;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.detail-item strong {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* PLACEHOLDER */
+
+.account-placeholder {
+    margin: 0 0 20px;
+    color: #777;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* BUTTON */
+
+.account-btn {
+    border: none;
+    background: #6c3df4;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.account-btn:hover {
+    background: #5630d4;
+    transform: translateY(-1px);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .account-page {
+        padding: 30px 15px;
+    }
+
+    .account-header h1 {
+        font-size: 30px;
+    }
+
+    .account-card {
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+}

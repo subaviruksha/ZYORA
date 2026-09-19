@@ -1,0 +1,439 @@
+.admin-page {
+    min-height: 100vh;
+    background: #faf9ff;
+    color: #222;
+}
+
+
+/* HEADER */
+
+.admin-header {
+    background: white;
+    padding: 35px 7%;
+    border-bottom: 1px solid #eeeeee;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-brand {
+    color: #6c3df4;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0 0 8px;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 30px;
+    color: #222;
+}
+
+.admin-header p:last-child {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* HEADER ACTIONS */
+
+.admin-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* ACCOUNT BUTTON */
+
+.admin-account-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    border: 1px solid #e3dcff;
+    background: #faf8ff;
+    color: #6c3df4;
+
+    padding: 10px 16px;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: 0.3s ease;
+}
+
+.admin-account-button:hover {
+    background: #f1ecff;
+    border-color: #6c3df4;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(108, 61, 244, 0.12);
+}
+
+.account-icon {
+    font-size: 14px;
+}
+
+
+/* LOGOUT */
+
+.admin-logout {
+    border: none;
+    background: #6c3df4;
+    color: white;
+
+    padding: 11px 22px;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: 0.3s ease;
+}
+
+.admin-logout:hover {
+    background: #5630d4;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(108, 61, 244, 0.18);
+}
+
+
+/* CONTAINER */
+
+.admin-container {
+    width: 86%;
+    max-width: 1200px;
+
+    margin: 40px auto;
+}
+
+
+/* STAT CARDS */
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.admin-stat-card {
+    position: relative;
+
+    background: white;
+    border: 1px solid #eeeeee;
+    border-radius: 14px;
+
+    padding: 25px;
+
+    overflow: hidden;
+
+    transition: 0.3s ease;
+}
+
+.admin-stat-card::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 4px;
+    height: 100%;
+
+    background: #6c3df4;
+}
+
+.admin-stat-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #e3dcff;
+
+    box-shadow: 0 12px 30px rgba(108, 61, 244, 0.08);
+}
+
+.admin-stat-card span {
+    display: block;
+
+    color: #777;
+    font-size: 14px;
+
+    margin-bottom: 12px;
+}
+
+.admin-stat-card strong {
+    font-size: 30px;
+    color: #6c3df4;
+}
+
+
+/* SECTION */
+
+.admin-section {
+    background: white;
+
+    border: 1px solid #eeeeee;
+    border-radius: 14px;
+
+    padding: 28px;
+
+    margin-top: 28px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.02);
+}
+
+.admin-section h2 {
+    margin: 0 0 22px;
+
+    font-size: 20px;
+}
+
+
+/* QUICK ACTIONS */
+
+.admin-actions {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* MANAGEMENT BUTTON */
+
+.admin-actions button {
+    position: relative;
+
+    text-align: left;
+
+    background: #fbfaff;
+
+    border: 1px solid #e3dcff;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+}
+
+.admin-actions button:hover {
+    border-color: #6c3df4;
+
+    background: #f8f4ff;
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 12px 28px rgba(108, 61, 244, 0.13);
+}
+
+.admin-action-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+.admin-actions strong {
+    display: block;
+
+    color: #333;
+
+    font-size: 15px;
+}
+
+.admin-actions button > span {
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+/* ARROW */
+
+.admin-action-arrow {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #eee8ff;
+
+    color: #6c3df4;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    transition: 0.3s ease;
+}
+
+.admin-actions button:hover .admin-action-arrow {
+    background: #6c3df4;
+
+    color: white;
+
+    transform: translateX(4px);
+}
+
+
+/* OVERVIEW */
+
+.admin-overview {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+.admin-overview p {
+    margin: 0;
+
+    padding: 16px;
+
+    background: #fbfaff;
+
+    border: 1px solid transparent;
+
+    border-radius: 8px;
+
+    color: #777;
+
+    font-size: 14px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    transition: 0.3s ease;
+}
+
+.admin-overview p:hover {
+    border-color: #eee9ff;
+
+    background: #f8f5ff;
+}
+
+.admin-overview strong {
+    color: #333;
+}
+
+
+/* LOADING */
+
+.admin-loading {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #6c3df4;
+
+    font-size: 18px;
+
+    font-weight: 600;
+}
+
+
+/* TABLET */
+
+@media (max-width: 900px) {
+
+    .admin-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .admin-actions {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .admin-header {
+        padding: 25px 6%;
+
+        align-items: flex-start;
+
+        gap: 20px;
+    }
+
+    .admin-header h1 {
+        font-size: 24px;
+    }
+
+    .admin-header-actions {
+        gap: 7px;
+    }
+
+    .admin-account-button {
+        padding: 9px 12px;
+    }
+
+    .admin-account-button span:last-child {
+        display: none;
+    }
+
+    .account-icon {
+        font-size: 16px;
+    }
+
+    .admin-logout {
+        padding: 10px 14px;
+    }
+
+    .admin-container {
+        width: 88%;
+    }
+
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-actions button {
+        padding: 20px;
+    }
+
+}
