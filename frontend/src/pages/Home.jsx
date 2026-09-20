@@ -22,7 +22,7 @@ function Home() {
             place.
           </p>
 
-<Link to="/product">Shop Now
+<Link to="/products">
             <button className="shop-btn">Shop Now</button>
          </Link>
         </div>
