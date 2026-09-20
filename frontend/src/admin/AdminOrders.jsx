@@ -22,7 +22,7 @@ function AdminOrders() {
     const fetchOrders = async () => {
         try {
             const response = await fetch(
-                "http://localhost:5000/api/orders/admin/all"
+"https://zyora-backend-rhv6.onrender.com/api/orders/admin/all"
             );
 
             const data = await response.json();
@@ -45,7 +45,7 @@ function AdminOrders() {
     const updateOrderStatus = async (orderId, orderStatus) => {
         try {
             const response = await fetch(
-                `http://localhost:5000/api/orders/admin/${orderId}/status`,
+`https://zyora-backend-rhv6.onrender.com/api/orders/admin/${orderId}/status`,
                 {
                     method: "PUT",
                     headers: {

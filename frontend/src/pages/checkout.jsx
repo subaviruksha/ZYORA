@@ -50,7 +50,7 @@ function Checkout() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/cart/${userId}`,
+`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}`,
         );
 
         const data = await response.json();
@@ -160,8 +160,8 @@ function Checkout() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/orders", {
-        method: "POST",
+fetch("https://zyora-backend-rhv6.onrender.com/api/orders", {
+          method: "POST",
 
         headers: {
           "Content-Type": "application/json",
@@ -327,7 +327,7 @@ function Checkout() {
                     alt={item.productId.productName}
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = `http://localhost:5000/productimage/${item.productId.image}`;
+e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
                     }}
                   />
 

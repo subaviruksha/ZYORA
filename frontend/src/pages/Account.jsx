@@ -36,7 +36,7 @@ function Account() {
             try {
 
                 const response = await fetch(
-                    `http://localhost:5000/api/auth/profile/${userId}`
+`https://zyora-backend-rhv6.onrender.com/api/auth/profile/${userId}`
                 );
 
                 const data = await response.json();
@@ -80,7 +80,7 @@ function Account() {
         try {
 
             const response = await fetch(
-                `http://localhost:5000/api/auth/profile/${userId}`,
+`https://zyora-backend-rhv6.onrender.com/api/auth/profile/${userId}`,
                 {
                     method: "PUT",
                     headers: {
@@ -143,7 +143,7 @@ function Account() {
         try {
 
             const response = await fetch(
-                `http://localhost:5000/api/auth/address/${userId}`,
+`https://zyora-backend-rhv6.onrender.com/api/auth/address/${userId}`,
                 {
                     method: "PUT",
                     headers: {
@@ -214,7 +214,7 @@ function Account() {
         try {
 
             const response = await fetch(
-                `http://localhost:5000/api/auth/change-password/${userId}`,
+`https://zyora-backend-rhv6.onrender.com/api/auth/change-password/${userId}`,
                 {
                     method: "PUT",
                     headers: {

@@ -8,7 +8,7 @@ function Categories() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

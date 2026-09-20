@@ -62,7 +62,7 @@ function Login() {
 
             try {
                 const response = await fetch(
-                    "http://localhost:5000/api/auth/register",
+"https://zyora-backend-rhv6.onrender.com/api/auth/register",
                     {
                         method: "POST",
                         headers: {
@@ -106,7 +106,7 @@ function Login() {
 
         try {
             const response = await fetch(
-                "http://localhost:5000/api/auth/login",
+"https://zyora-backend-rhv6.onrender.com/api/auth/login",
                 {
                     method: "POST",
                     headers: {

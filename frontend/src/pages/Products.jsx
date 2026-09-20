@@ -11,7 +11,7 @@ function Products() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -211,7 +211,7 @@ function Products() {
                     alt={product.productName}
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = `http://localhost:5000/productimage/${product.image}`;
+e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
                     }}
                   />
 

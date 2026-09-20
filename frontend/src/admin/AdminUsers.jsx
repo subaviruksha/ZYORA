@@ -22,7 +22,7 @@ function AdminUsers() {
     const fetchUsers = async () => {
         try {
             const response = await fetch(
-                "http://localhost:5000/api/admin/users"
+"https://zyora-backend-rhv6.onrender.com/api/admin/users"
             );
 
             const data = await response.json();

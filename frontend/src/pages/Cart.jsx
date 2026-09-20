@@ -12,7 +12,7 @@ function Cart() {
     const fetchCart = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/cart/${userId}`,
+`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}`,
         );
 
         const data = await response.json();
@@ -37,7 +37,7 @@ function Cart() {
   const increaseQuantity = async (productId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/cart/${userId}/increase`,
+`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/increase`,
         {
           method: "PUT",
           headers: {
@@ -65,7 +65,7 @@ function Cart() {
   const decreaseQuantity = async (productId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/cart/${userId}/decrease`,
+`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/decrease`,
         {
           method: "PUT",
           headers: {
@@ -93,7 +93,7 @@ function Cart() {
   const removeProduct = async (productId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/cart/${userId}/remove`,
+`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/remove`,
         {
           method: "DELETE",
           headers: {
@@ -181,7 +181,7 @@ function Cart() {
     className="cart-item-image"
     onError={(e) => {
         e.target.onerror = null;
-        e.target.src = `http://localhost:5000/productimage/${item.productId.image}`;
+e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
     }}
 />
 

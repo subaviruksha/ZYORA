@@ -27,8 +27,7 @@ function AdminEditProduct() {
             try {
 
                 const response = await fetch(
-                    `http://localhost:5000/api/products/${id}`
-                );
+`https://zyora-backend-rhv6.onrender.com/api/products/${id}`                );
 
                 const data = await response.json();
 
@@ -74,7 +73,7 @@ function AdminEditProduct() {
         try {
 
             const response = await fetch(
-                `http://localhost:5000/api/products/${id}`,
+`https://zyora-backend-rhv6.onrender.com/api/products/${id}`,                
                 {
                     method: "PUT",
                     headers: {

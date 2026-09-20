@@ -65,7 +65,7 @@ function AdminAddProduct() {
             }
 
             const response = await fetch(
-                "http://localhost:5000/api/products",
+                "https://zyora-backend-rhv6.onrender.com/api/products",
                 {
                     method: "POST",
                     body: data

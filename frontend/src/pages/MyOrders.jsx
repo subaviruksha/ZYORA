@@ -12,7 +12,7 @@ function MyOrders() {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/orders/${userId}`,
+`https://zyora-backend-rhv6.onrender.com/api/orders/${userId}`,
         );
 
         const data = await response.json();
@@ -102,7 +102,7 @@ function MyOrders() {
                       alt={item.productId.productName}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = `http://localhost:5000/productimage/${item.productId.image}`;
+e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
                       }}
                     />
 

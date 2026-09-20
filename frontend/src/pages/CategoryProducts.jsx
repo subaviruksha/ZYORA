@@ -8,7 +8,7 @@ function CategoryProducts() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -41,7 +41,7 @@ function CategoryProducts() {
                 alt={product.productName}
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = `http://localhost:5000/productimage/${product.image}`;
+e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
                 }}
               />
             </div>

@@ -10,7 +10,7 @@ function ProductDetails() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
+fetch(`https://zyora-backend-rhv6.onrender.com/api/products/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setProduct(data);
@@ -24,8 +24,8 @@ function ProductDetails() {
     const userId = localStorage.getItem("userId");
 
     try {
-      const response = await fetch("http://localhost:5000/api/cart", {
-        method: "POST",
+const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/cart", {
+          method: "POST",
 
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +80,7 @@ function ProductDetails() {
             alt={product.productName}
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = `http://localhost:5000/productimage/${product.image}`;
+e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
             }}
           />
         </div>

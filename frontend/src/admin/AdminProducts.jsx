@@ -22,7 +22,7 @@ function AdminProducts() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/products");
+      const response = await fetch( "https://zyora-backend-rhv6.onrender.com/api/products");
 
       const data = await response.json();
 
@@ -52,7 +52,7 @@ function AdminProducts() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const response = await fetch(  `https://zyora-backend-rhv6.onrender.com/api/products/${id}`, {
         method: "DELETE",
       });
 
@@ -119,8 +119,7 @@ function AdminProducts() {
                     alt={product.productName}
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = `http://localhost:5000/productimage/${product.image}`;
-                    }}
+e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;                    }}
                   />
                 </div>
 
