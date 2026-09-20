@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Checkout from "./pages/checkout";
 import Home from "./pages/Home";
@@ -22,13 +23,25 @@ import AdminOrders from "./admin/AdminOrders";
 import AdminAccount from "./admin/AdminAccount";
 import AdminAddProduct from "./admin/AdminAddProduct";
 
+function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+}
+
 function App() {
+
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   const role = localStorage.getItem("role");
 
   return (
     <BrowserRouter>
+    <ScrollToTop />
       {isLoggedIn && role === "user" && <Navbar />}
 
       <Routes>
