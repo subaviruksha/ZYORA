@@ -22,9 +22,9 @@ function Home() {
             place.
           </p>
 
-          <a href="/products" alt="Products Show Error">
+<Link to="/product">Shop Now
             <button className="shop-btn">Shop Now</button>
-          </a>
+         </Link>
         </div>
 
         <div className="hero-image">
