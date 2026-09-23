@@ -296,8 +296,9 @@
     } 
  
     .filter-box { 
-        position: static; 
-        overflow-x: auto; 
+    
+    position: relative;
+    overflow-x: auto;
         display: flex; 
         align-items: center; 
         gap: 18px; 
