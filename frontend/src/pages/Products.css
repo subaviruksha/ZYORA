@@ -298,6 +298,26 @@
         height: 190px;
     }
 
+        .filter-box {
+        position: static;
+        overflow-x: auto;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 18px 20px;
+        white-space: nowrap;
+    }
+
+    .filter-box h3 {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    .filter-box label {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
 }
 
 
