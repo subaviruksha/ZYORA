@@ -186,9 +186,7 @@ function Products() {
             Beauty
           </label>
 
-          <div className="category-scroll-line">
-            <div className="category-scroll-thumb"></div>
-          </div>
+          
         </aside>
 
         <main className="product-section">
