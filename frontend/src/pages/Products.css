@@ -296,13 +296,17 @@
     } 
  
     .filter-box { 
-        position: relative;
-        overflow-x: auto;
+        position: relative; 
+        overflow-x: auto; 
         display: flex; 
         align-items: center; 
         gap: 18px; 
         padding: 18px 20px; 
         white-space: nowrap; 
+
+        /* Visible horizontal scrollbar */
+        scrollbar-width: thin;
+        scrollbar-color: #c9b8ff #f3f0ff;
     } 
  
     .filter-box h3 { 
@@ -315,20 +319,23 @@
         flex-shrink: 0; 
     }
 
-    /* Subtle scroll hint */
-    .filter-box::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 28px;
-        height: 100%;
-        background: linear-gradient(
-            to right,
-            transparent,
-            white
-        );
-        pointer-events: none;
+    /* Chrome / Edge */
+    .filter-box::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .filter-box::-webkit-scrollbar-track {
+        background: #f3f0ff;
+        border-radius: 10px;
+    }
+
+    .filter-box::-webkit-scrollbar-thumb {
+        background: #c9b8ff;
+        border-radius: 10px;
+    }
+
+    .filter-box::-webkit-scrollbar-thumb:hover {
+        background: #b6a0ff;
     }
  
 } 
