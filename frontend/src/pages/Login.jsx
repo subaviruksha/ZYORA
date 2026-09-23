@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import "./Login.css";
 
@@ -14,6 +13,7 @@ function Login() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const logoutMessage = sessionStorage.getItem("logoutMessage");
@@ -80,10 +80,12 @@ function Login() {
                 const data = await response.json();
 
                 if (!response.ok) {
+                    setLoading(false);
                     setMessage(data.message || "Signup failed.");
                     return;
                 }
 
+                setLoading(false);
                 setMessage("Account created successfully!");
 
                 setTimeout(() => {
@@ -96,6 +98,7 @@ function Login() {
                 }, 1200);
 
             } catch (error) {
+                setLoading(false);
                 setMessage("Unable to connect to server.");
             }
 
@@ -123,6 +126,7 @@ function Login() {
             const data = await response.json();
 
             if (!response.ok) {
+                setLoading(false);
                 setMessage(data.message || "Invalid email or password.");
                 return;
             }
@@ -152,6 +156,7 @@ function Login() {
             },);
 
         } catch (error) {
+            setLoading(false);
             setMessage("Unable to connect to server.");
         }
     };
@@ -427,9 +432,15 @@ function Login() {
                         >
 
                             <span>
-                                {isSignup
-                                    ? "Create Account"
-                                    : "Login"}
+                                {loading
+                                    ? (isSignup
+                                        ? "Creating account..."
+                                        : loginRole === "admin"
+                                            ? "Admin logging in..."
+                                            : "Logging in...")
+                                    : (isSignup
+                                        ? "Create Account"
+                                        : "Login")}
                             </span>
 
                             <b>→</b>
