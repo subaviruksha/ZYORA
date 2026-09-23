@@ -149,7 +149,7 @@ function Login() {
                     window.location.href = "/";
                 }
 
-            }, 1000);
+            },);
 
         } catch (error) {
             setMessage("Unable to connect to server.");
