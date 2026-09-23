@@ -160,8 +160,8 @@ function Checkout() {
     };
 
     try {
-fetch("https://zyora-backend-rhv6.onrender.com/api/orders", {
-          method: "POST",
+const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders", {        
+    method: "POST",
 
         headers: {
           "Content-Type": "application/json",
