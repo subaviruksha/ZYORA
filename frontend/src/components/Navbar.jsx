@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./Navbar.css";
@@ -6,6 +5,7 @@ import "./Navbar.css";
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const userId = localStorage.getItem("userId");
   const location = useLocation();
@@ -18,7 +18,7 @@ function Navbar() {
       }
 
       const response = await fetch(
- `https://zyora-backend-rhv6.onrender.com/api/cart/${userId}`
+        `https://zyora-backend-rhv6.onrender.com/api/cart/${userId}`
       );
 
       const data = await response.json();
@@ -55,6 +55,8 @@ function Navbar() {
   }, [userId]);
 
   const handleLogout = () => {
+    setLoggingOut(true);
+
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userId");
     localStorage.removeItem("userName");
@@ -118,6 +120,12 @@ function Navbar() {
           Logout
         </button>
       </div>
+
+      {loggingOut && (
+        <div className="logout-message">
+          Logging out...
+        </div>
+      )}
     </nav>
   );
 }
