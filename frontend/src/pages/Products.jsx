@@ -90,7 +90,6 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       <div className="products-layout">
         <aside className="filter-box">
           <h3>Categories</h3>
-           <p className="scroll-hint">Swipe → to see more</p>
           <label>
             <input
               type="checkbox"
