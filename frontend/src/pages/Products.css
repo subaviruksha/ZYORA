@@ -11,6 +11,10 @@
     position: relative;
 }
 
+.scroll-hint {
+    display: none;
+}
+
 .product-search input {
     width: 100%;
     box-sizing: border-box;
@@ -318,6 +322,12 @@
         flex-shrink: 0;
     }
 
+    .scroll-hint {
+    display: block;
+    color: #777;
+    font-size: 11px;
+    margin: -10px 0 10px;
+}
 }
 
 
