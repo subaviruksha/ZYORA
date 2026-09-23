@@ -304,6 +304,7 @@
         gap: 18px; 
         padding: 18px 20px; 
         white-space: nowrap; 
+        padding-right: 45px;
     } 
  
     .filter-box h3 { 
@@ -318,21 +319,21 @@
 
     /* Scroll arrow hint */
     .filter-box::after {
-        content: "→";
-        position: absolute;
-        right: 0;
-        top: 0;
-        height: 100%;
-        width: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(to right, transparent, white 45%);
-        color: #6c3df4;
-        font-size: 20px;
-        font-weight: 600;
-        pointer-events: none;
-    }
+    content: "→";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: #6c3df4;
+    font-size: 20px;
+    font-weight: 600;
+    pointer-events: none;
+}
  
 } 
  

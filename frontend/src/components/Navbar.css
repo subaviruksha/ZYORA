@@ -11,6 +11,22 @@
     z-index: 1000;
 }
 
+
+.logout-message {
+    position: fixed;
+    top: 80px;
+    right: 25px;
+    background: white;
+    color: #6c3df4;
+    border: 1px solid #e3def5;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(108, 61, 244, 0.12);
+    z-index: 1000;
+}
+
 .logo {
     font-size: 28px;
     font-weight: 700;
