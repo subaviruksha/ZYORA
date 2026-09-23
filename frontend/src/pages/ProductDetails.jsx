@@ -10,7 +10,7 @@ function ProductDetails() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-fetch(`https://zyora-backend-rhv6.onrender.com/api/products/${id}`)
+    fetch(`https://zyora-backend-rhv6.onrender.com/api/products/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setProduct(data);
@@ -24,18 +24,21 @@ fetch(`https://zyora-backend-rhv6.onrender.com/api/products/${id}`)
     const userId = localStorage.getItem("userId");
 
     try {
-const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/cart", {
+      const response = await fetch(
+        "https://zyora-backend-rhv6.onrender.com/api/cart",
+        {
           method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-        body: JSON.stringify({
-          userId: userId,
-          productId: product._id,
-        }),
-      });
+          body: JSON.stringify({
+            userId: userId,
+            productId: product._id,
+          }),
+        },
+      );
 
       const data = await response.json();
 
@@ -80,7 +83,7 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/cart",
             alt={product.productName}
             onError={(e) => {
               e.target.onerror = null;
-e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
+              e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
             }}
           />
         </div>
@@ -178,13 +181,15 @@ e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.i
           </div>
         )}
 
-        {product.availability && (
-          <div className="extra-section">
-            <h2>Availability</h2>
+        <div className="extra-section">
+          <h2>Availability</h2>
 
-            <p className="availability">{product.availability}</p>
-          </div>
-        )}
+          <p className="availability">
+            {product.stock > 0
+              ? `${product.stock} units Available`
+              : "Out of Stock"}
+          </p>
+        </div>
 
         <div className="extra-section">
           <h2>About This Product</h2>
