@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Products.css";
 
@@ -8,10 +8,12 @@ function Products() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const categoryScrollRef = useRef(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-fetch("https://zyora-backend-rhv6.onrender.com/api/products")
+    fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -88,8 +90,12 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       </div>
 
       <div className="products-layout">
-        <aside className="filter-box">
+        <aside
+          className="filter-box"
+          ref={categoryScrollRef}
+        >
           <h3>Categories</h3>
+
           <label>
             <input
               type="checkbox"
@@ -179,6 +185,10 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
             />
             Beauty
           </label>
+
+          <div className="category-scroll-line">
+            <div className="category-scroll-thumb"></div>
+          </div>
         </aside>
 
         <main className="product-section">
@@ -210,7 +220,7 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
                     alt={product.productName}
                     onError={(e) => {
                       e.target.onerror = null;
-e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
+                      e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
                     }}
                   />
 
@@ -228,14 +238,20 @@ e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.i
                   </div>
 
                   <div className="price">
-                    <strong>₹{product.price.toLocaleString("en-IN")}</strong>
+                    <strong>
+                      ₹{product.price.toLocaleString("en-IN")}
+                    </strong>
 
-                    <del>₹{product.oldPrice.toLocaleString("en-IN")}</del>
+                    <del>
+                      ₹{product.oldPrice.toLocaleString("en-IN")}
+                    </del>
                   </div>
 
                   <button
                     className="view-product"
-                    onClick={() => navigate(`/products/${product._id}`)}
+                    onClick={() =>
+                      navigate(`/products/${product._id}`)
+                    }
                   >
                     View Product
                   </button>
