@@ -283,9 +283,20 @@
     display: block;
     text-align: center;
     margin-top: 15px;
+    padding: 12px;
+    background: #f0eaff;
+    border: 1px solid #ded2ff;
+    border-radius: 8px;
     color: #6c3df4;
-    text-decoration: none;
     font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.back-cart:hover {
+    background: #6c3df4;
+    color: white;
 }
 
 .checkout-empty {
