@@ -1,3 +1,4 @@
+
 .admin-products-page {
     min-height: 100vh;
     background: #faf9ff;
@@ -118,6 +119,68 @@
 .admin-products-top span {
     color: #777;
     font-size: 14px;
+}
+
+
+/* Category Filter */
+
+.admin-category-filter {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+
+    background: white;
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+
+    padding: 18px 20px;
+    margin-bottom: 22px;
+}
+
+
+.admin-category-filter label {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.admin-category-filter select {
+    min-width: 200px;
+    padding: 11px 14px;
+
+    background: #fbfaff;
+    color: #6c3df4;
+
+    border: 1px solid #e3dcff;
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+
+.admin-category-filter select:hover {
+    border-color: #6c3df4;
+    background: #f8f4ff;
+}
+
+
+.admin-category-filter select:focus {
+    border-color: #6c3df4;
+    box-shadow: 0 0 0 3px rgba(108, 61, 244, 0.1);
+}
+
+
+.admin-filter-count {
+    margin-left: auto;
+    color: #777;
+    font-size: 13px;
 }
 
 
@@ -485,6 +548,25 @@
         align-items: flex-start;
 
         gap: 10px;
+    }
+
+
+    .admin-category-filter {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+
+    .admin-category-filter select {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+
+    .admin-filter-count {
+        margin-left: 0;
     }
 
 

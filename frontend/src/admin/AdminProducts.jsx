@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminProducts.css";
@@ -8,6 +9,7 @@ function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All Products");
 
   useEffect(() => {
     const role = localStorage.getItem("role");
@@ -22,20 +24,20 @@ function AdminProducts() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch( "https://zyora-backend-rhv6.onrender.com/api/products");
+      const response = await fetch(
+        "https://zyora-backend-rhv6.onrender.com/api/products"
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
         setError(data.message || "Error fetching products");
-
         return;
       }
 
       setProducts(data);
     } catch (error) {
       console.log("Products Error:", error);
-
       setError("Unable to connect to the server");
     } finally {
       setLoading(false);
@@ -44,7 +46,7 @@ function AdminProducts() {
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product?",
+      "Are you sure you want to delete this product?"
     );
 
     if (!confirmDelete) {
@@ -52,15 +54,17 @@ function AdminProducts() {
     }
 
     try {
-      const response = await fetch(  `https://zyora-backend-rhv6.onrender.com/api/products/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `https://zyora-backend-rhv6.onrender.com/api/products/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         alert("Product deleted successfully");
-
         fetchProducts();
       } else {
         alert(data.message || "Error deleting product");
@@ -69,6 +73,21 @@ function AdminProducts() {
       console.log("Delete Error:", error);
     }
   };
+
+  const categories = [
+    ...new Set(
+      products
+        .map((product) => product.category)
+        .filter((category) => category && category.trim() !== "")
+    ),
+  ].sort((a, b) => a.localeCompare(b));
+
+  const filteredProducts =
+    selectedCategory === "All Products"
+      ? products
+      : products.filter(
+          (product) => product.category === selectedCategory
+        );
 
   if (loading) {
     return <div className="admin-loading">Loading Products...</div>;
@@ -86,7 +105,9 @@ function AdminProducts() {
         </div>
 
         <div className="admin-products-buttons">
-          <button onClick={() => navigate("/admin")}>Dashboard</button>
+          <button onClick={() => navigate("/admin")}>
+            Dashboard
+          </button>
 
           <button onClick={() => navigate("/admin/products/add")}>
             + Add Product
@@ -103,15 +124,43 @@ function AdminProducts() {
           <span>{products.length} Products</span>
         </div>
 
-        {products.length === 0 ? (
+        <div className="admin-category-filter">
+          <label htmlFor="admin-category-select">
+            Filter by Category
+          </label>
+
+          <select
+            id="admin-category-select"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="All Products">All Products</option>
+
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+
+          <span className="admin-filter-count">
+            Showing {filteredProducts.length} of {products.length} products
+          </span>
+        </div>
+
+        {filteredProducts.length === 0 ? (
           <div className="admin-no-products">
             <h3>No Products Found</h3>
 
-            <p>There are no products available.</p>
+            <p>
+              {selectedCategory === "All Products"
+                ? "There are no products available."
+                : "No products available in this category."}
+            </p>
           </div>
         ) : (
           <div className="admin-products-list">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <div className="admin-product-card" key={product._id}>
                 <div className="admin-product-image">
                   <img
@@ -119,12 +168,15 @@ function AdminProducts() {
                     alt={product.productName}
                     onError={(e) => {
                       e.target.onerror = null;
-e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;                    }}
+                      e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
+                    }}
                   />
                 </div>
 
                 <div className="admin-product-info">
-                  <p className="admin-product-category">{product.category}</p>
+                  <p className="admin-product-category">
+                    {product.category}
+                  </p>
 
                   <h3>{product.productName}</h3>
 
@@ -134,9 +186,13 @@ e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.i
                   </div>
 
                   <div className="admin-product-price">
-                    <strong>₹{product.price.toLocaleString("en-IN")}</strong>
+                    <strong>
+                      ₹{product.price.toLocaleString("en-IN")}
+                    </strong>
 
-                    <del>₹{product.oldPrice.toLocaleString("en-IN")}</del>
+                    <del>
+                      ₹{product.oldPrice.toLocaleString("en-IN")}
+                    </del>
                   </div>
 
                   <p>Discount: {product.discount}%</p>
