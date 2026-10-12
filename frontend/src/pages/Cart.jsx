@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Cart.css";
@@ -12,7 +13,7 @@ function Cart() {
     const fetchCart = async () => {
       try {
         const response = await fetch(
-`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}`,
+          `https://zyora-backend-rhv6.onrender.com/api/cart/${userId}`,
         );
 
         const data = await response.json();
@@ -37,7 +38,7 @@ function Cart() {
   const increaseQuantity = async (productId) => {
     try {
       const response = await fetch(
-`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/increase`,
+        `https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/increase`,
         {
           method: "PUT",
           headers: {
@@ -65,7 +66,7 @@ function Cart() {
   const decreaseQuantity = async (productId) => {
     try {
       const response = await fetch(
-`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/decrease`,
+        `https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/decrease`,
         {
           method: "PUT",
           headers: {
@@ -93,7 +94,7 @@ function Cart() {
   const removeProduct = async (productId) => {
     try {
       const response = await fetch(
-`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/remove`,
+        `https://zyora-backend-rhv6.onrender.com/api/cart/${userId}/remove`,
         {
           method: "DELETE",
           headers: {
@@ -159,6 +160,11 @@ function Cart() {
   return (
     <div className="cart-page">
       <div className="cart-container">
+
+        <Link to="/products" className="cart-continue-btn">
+          ← Continue Shopping
+        </Link>
+
         <div className="cart-header">
           <p className="cart-label">YOUR SHOPPING BAG</p>
 
@@ -175,15 +181,15 @@ function Cart() {
                   to={`/products/${item.productId._id}`}
                   className="cart-product-link"
                 >
-                  <img 
-    src={`/productimage/${item.productId.image}`}
-    alt={item.productId.productName}
-    className="cart-item-image"
-    onError={(e) => {
-        e.target.onerror = null;
-e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
-    }}
-/>
+                  <img
+                    src={`/productimage/${item.productId.image}`}
+                    alt={item.productId.productName}
+                    className="cart-item-image"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
+                    }}
+                  />
 
                   <div className="cart-item-details">
                     <div className="cart-item-brand">
