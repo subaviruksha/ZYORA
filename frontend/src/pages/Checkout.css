@@ -279,25 +279,29 @@
     background: #5630d4;
 }
 
-.back-cart {
+.checkout-summary .back-cart {
     display: block;
+    width: 100%;
+    box-sizing: border-box;
     text-align: center;
     margin-top: 15px;
-    padding: 12px;
-    background: #f0eaff;
-    border: 1px solid #ded2ff;
-    border-radius: 8px;
+    padding: 13px 20px;
+    background: #e9ddff;
+    border: 2px solid #b99aff;
+    border-radius: 9px;
     color: #6c3df4;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
     transition: 0.3s;
 }
 
-.back-cart:hover {
+.checkout-summary .back-cart:hover {
     background: #6c3df4;
     color: white;
 }
+
+
 
 .checkout-empty {
     text-align: center;
