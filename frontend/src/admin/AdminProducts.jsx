@@ -99,7 +99,7 @@ function AdminProducts() {
         <div>
           <p className="admin-brand">ZYORA</p>
 
-          <h1>Manage Products Test</h1>
+          <h1>Manage Products</h1>
 
           <p>Add, edit and manage your store products.</p>
         </div>
@@ -118,11 +118,13 @@ function AdminProducts() {
       <div className="admin-products-container">
         {error && <div className="admin-product-error">{error}</div>}
 
-        <div className="admin-products-top">
-          <h2>All Products</h2>
+       
+<div className="admin-products-top">
+  <h2>{selectedCategory}</h2>
 
-          <span>{products.length} Products</span>
-        </div>
+  <span>{filteredProducts.length} Products</span>
+</div>
+
 
         <div className="admin-category-filter">
           <label htmlFor="admin-category-select">
@@ -143,9 +145,7 @@ function AdminProducts() {
             ))}
           </select>
 
-          <span className="admin-filter-count">
-            Showing {filteredProducts.length} of {products.length} products
-          </span>
+         
         </div>
 
         {filteredProducts.length === 0 ? (
