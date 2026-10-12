@@ -46,9 +46,9 @@ function AdminDashboard() {
 
     const fetchOrders = async () => {
       try {
-        const response = await fetch(
-          "https://zyora-backend-rhv6.onrender.com/api/admin/orders",
-        );
+     const response = await fetch(
+    "https://zyora-backend-rhv6.onrender.com/api/orders/admin/all"
+);
 
         if (!response.ok) {
           throw new Error("Failed to fetch orders");
@@ -100,7 +100,7 @@ function AdminDashboard() {
   const getStatusCount = (status) => {
     return orders.filter((order) => {
       return (
-        String(order.status || "")
+String(order.orderStatus || "")
           .trim()
           .toLowerCase() === status.toLowerCase()
       );
@@ -247,11 +247,9 @@ function AdminDashboard() {
                       </td>
 
                       <td>
-                        <span
-                          className={`admin-order-status ${String(order.status || "pending").toLowerCase()}`}
-                        >
-                          {order.status || "Pending"}
-                        </span>
+                        <span className={`admin-order-status ${String(order.orderStatus || "Pending").toLowerCase()}`}>
+    {order.orderStatus || "Pending"}
+</span>
                       </td>
                     </tr>
                   ))}
