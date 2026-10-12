@@ -75,6 +75,13 @@ function ProductDetails() {
   return (
     <div className="product-page">
       {message && <div className="cart-message">{message}</div>}
+      
+      <button
+  className="product-back-btn"
+  onClick={() => navigate(-1)}
+>
+  ← Back
+</button>
 
       <div className="product-details">
         <div className="details-image">

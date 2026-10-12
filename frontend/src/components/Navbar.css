@@ -6,12 +6,9 @@
     justify-content: flex-start !important;
     background: white !important;
     border-bottom: 1px solid #eeeeee;
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 9999;
-    box-sizing: border-box;
+    position: sticky !important;
+top: 0;
+z-index: 9999;
 }
 
 

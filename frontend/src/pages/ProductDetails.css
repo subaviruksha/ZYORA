@@ -30,6 +30,23 @@
         0 14px 30px rgba(108, 61, 244, 0.3);
 }
 
+.product-back-btn {
+    display: inline-block;
+    margin-bottom: 25px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: #6c3df4;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.product-back-btn:hover {
+    color: #5630d4;
+}
+
 @media (max-width: 600px) {
 
     .details-buttons {
