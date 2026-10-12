@@ -347,7 +347,7 @@
 .admin-recent-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 550px;
+    min-width: 850px;
     text-align: left;
 }
 
@@ -402,6 +402,11 @@
     color: #b7791f;
 }
 
+.admin-order-status.processing {
+    background: #f0eaff;
+    color: #6c3df4;
+}
+
 .admin-order-status.shipped {
     background: #eaf2ff;
     color: #3567c8;
@@ -415,6 +420,41 @@
 .admin-order-status.cancelled {
     background: #ffeaea;
     color: #d34b4b;
+}
+
+
+/* RECENT ORDER ACTION DROPDOWN */
+
+.admin-recent-status-select {
+    background: #fbfaff;
+    border: 1px solid #e3dcff;
+    border-radius: 8px;
+    color: #6c3df4;
+
+    padding: 9px 12px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    outline: none;
+
+    transition: 0.3s ease;
+}
+
+.admin-recent-status-select:hover {
+    border-color: #6c3df4;
+    background: #f8f4ff;
+}
+
+.admin-recent-status-select:focus {
+    border-color: #6c3df4;
+    box-shadow: 0 0 0 3px rgba(108, 61, 244, 0.1);
+}
+
+.admin-recent-status-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 
@@ -578,6 +618,11 @@
     .admin-recent-table th,
     .admin-recent-table td {
         padding: 13px;
+        font-size: 12px;
+    }
+
+    .admin-recent-status-select {
+        padding: 8px 10px;
         font-size: 12px;
     }
 

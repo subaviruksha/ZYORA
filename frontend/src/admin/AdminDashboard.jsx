@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminDashboard.css";
@@ -15,6 +16,7 @@ function AdminDashboard() {
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [ordersError, setOrdersError] = useState(false);
+  const [updatingOrderId, setUpdatingOrderId] = useState(null);
 
   const [loading, setLoading] = useState(true);
 
@@ -46,9 +48,9 @@ function AdminDashboard() {
 
     const fetchOrders = async () => {
       try {
-     const response = await fetch(
-    "https://zyora-backend-rhv6.onrender.com/api/orders/admin/all"
-);
+        const response = await fetch(
+          "https://zyora-backend-rhv6.onrender.com/api/orders/admin/all"
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch orders");
@@ -91,6 +93,69 @@ function AdminDashboard() {
     navigate("/admin/account");
   };
 
+  const updateOrderStatus = async (orderId, orderStatus) => {
+    if (updatingOrderId) {
+      return;
+    }
+
+    setUpdatingOrderId(orderId);
+
+    try {
+      const response = await fetch(
+        `https://zyora-backend-rhv6.onrender.com/api/orders/admin/${orderId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderStatus,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setOrders((previousOrders) =>
+          previousOrders.map((order) =>
+            order._id === orderId
+              ? {
+                  ...order,
+                  orderStatus: orderStatus,
+                }
+              : order
+          )
+        );
+
+        setStats((previousStats) => {
+          const updatedOrders = orders.map((order) =>
+            order._id === orderId
+              ? { ...order, orderStatus }
+              : order
+          );
+
+          return {
+            ...previousStats,
+            pendingOrders: updatedOrders.filter(
+              (order) =>
+                String(order.orderStatus || "")
+                  .trim()
+                  .toLowerCase() === "pending"
+            ).length,
+          };
+        });
+      } else {
+        alert(data.message || "Error updating order status");
+      }
+    } catch (error) {
+      console.log("Update Status Error:", error);
+      alert("Unable to update order status");
+    } finally {
+      setUpdatingOrderId(null);
+    }
+  };
+
   const recentOrders = [...orders]
     .sort((a, b) => {
       return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
@@ -100,7 +165,7 @@ function AdminDashboard() {
   const getStatusCount = (status) => {
     return orders.filter((order) => {
       return (
-String(order.orderStatus || "")
+        String(order.orderStatus || "")
           .trim()
           .toLowerCase() === status.toLowerCase()
       );
@@ -222,34 +287,84 @@ String(order.orderStatus || "")
                 <thead>
                   <tr>
                     <th>Order ID</th>
+                    <th>Customer</th>
                     <th>Date</th>
+                    <th>Time</th>
                     <th>Amount</th>
                     <th>Status</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {recentOrders.map((order) => (
                     <tr key={order._id}>
-                      <td>#{String(order._id).slice(-6).toUpperCase()}</td>
+                      <td>
+                        #{String(order._id).slice(-6).toUpperCase()}
+                      </td>
+
+                      <td>
+                        {order.userId?.name ||
+                          order.deliveryAddress?.name ||
+                          "N/A"}
+                      </td>
 
                       <td>
                         {order.createdAt
                           ? new Date(order.createdAt).toLocaleDateString(
+                              "en-IN"
+                            )
+                          : "—"}
+                      </td>
+
+                      <td>
+                        {order.createdAt
+                          ? new Date(order.createdAt).toLocaleTimeString(
                               "en-IN",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                                timeZone: "Asia/Kolkata",
+                              }
                             )
                           : "—"}
                       </td>
 
                       <td>
                         ₹
-                        {Number(order.totalAmount || 0).toLocaleString("en-IN")}
+                        {Number(order.totalAmount || 0).toLocaleString(
+                          "en-IN"
+                        )}
                       </td>
 
                       <td>
-                        <span className={`admin-order-status ${String(order.orderStatus || "Pending").toLowerCase()}`}>
-    {order.orderStatus || "Pending"}
-</span>
+                        <span
+                          className={`admin-order-status ${String(
+                            order.orderStatus || "Pending"
+                          ).toLowerCase()}`}
+                        >
+                          {order.orderStatus || "Pending"}
+                        </span>
+                      </td>
+
+                      <td>
+                        <select
+                          className="admin-recent-status-select"
+                          value={order.orderStatus || "Pending"}
+                          disabled={updatingOrderId !== null}
+                          onChange={(e) =>
+                            updateOrderStatus(
+                              order._id,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Processing">Processing</option>
+                          <option value="Shipped">Shipped</option>
+                          <option value="Delivered">Delivered</option>
+                        </select>
                       </td>
                     </tr>
                   ))}
@@ -275,6 +390,12 @@ String(order.orderStatus || "")
               </div>
 
               <div className="admin-status-card">
+                <span>Processing</span>
+
+                <strong>{getStatusCount("processing")}</strong>
+              </div>
+
+              <div className="admin-status-card">
                 <span>Shipped</span>
 
                 <strong>{getStatusCount("shipped")}</strong>
@@ -284,12 +405,6 @@ String(order.orderStatus || "")
                 <span>Delivered</span>
 
                 <strong>{getStatusCount("delivered")}</strong>
-              </div>
-
-              <div className="admin-status-card">
-                <span>Cancelled</span>
-
-                <strong>{getStatusCount("cancelled")}</strong>
               </div>
             </div>
           )}
