@@ -144,6 +144,51 @@
     color: #ffffff;
 }
 
+.category-sort {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    gap: 15px;
+}
+
+.category-sort p {
+    color: #777;
+    font-size: 14px;
+    margin: 0;
+}
+
+.category-sort select {
+    padding: 11px 16px;
+    border: 1px solid #eeeaf6;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #222;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+}
+
+.category-sort select:focus {
+    border-color: #6c3df4;
+}
+
+@media (max-width: 500px) {
+    .category-sort {
+        gap: 10px;
+    }
+
+    .category-sort p {
+        font-size: 12px;
+    }
+
+    .category-sort select {
+        padding: 10px;
+        font-size: 12px;
+        max-width: 65%;
+    }
+}
+
 @media (max-width: 1000px) {
     .category-product-grid {
         grid-template-columns: repeat(3, 1fr);
