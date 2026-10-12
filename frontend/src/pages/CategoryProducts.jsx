@@ -33,6 +33,11 @@ function CategoryProducts() {
 
   return (
     <div className="category-products-page">
+      
+      <Link to="/categories" className="category-back-btn">
+  ← Back to Categories
+</Link>
+
       <div className="category-products-header">
         <p>ZYORA COLLECTION</p>
 

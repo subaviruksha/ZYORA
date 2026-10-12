@@ -173,6 +173,20 @@
     border-color: #6c3df4;
 }
 
+
+.category-back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #6c3df4;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.category-back-btn:hover {
+    color: #5630d4;
+}
+
 @media (max-width: 500px) {
     .category-sort {
         gap: 10px;
