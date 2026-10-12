@@ -223,7 +223,9 @@ function AdminDashboard() {
           <div className="admin-stat-card">
             <span>Pending Orders</span>
 
-            <strong>{stats.pendingOrders}</strong>
+<strong>
+  {ordersLoading ? "..." : ordersError ? "—" : getStatusCount("pending")}
+</strong>
           </div>
         </div>
 
