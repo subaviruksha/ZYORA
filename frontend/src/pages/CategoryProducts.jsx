@@ -7,6 +7,7 @@ function CategoryProducts() {
 
   const [products, setProducts] = useState([]);
   const [sortOption, setSortOption] = useState("");
+
   useEffect(() => {
     fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       .then((response) => response.json())
@@ -29,6 +30,7 @@ function CategoryProducts() {
     if (sortOption === "discount") return b.discount - a.discount;
     return 0;
   });
+
   return (
     <div className="category-products-page">
       <div className="category-products-header">
@@ -39,22 +41,22 @@ function CategoryProducts() {
         <span>Explore our {category.toLowerCase()} collection.</span>
       </div>
 
-        <div className="category-sort">
-          <p>Showing {sortedProducts.length} products</p>
+      <div className="category-sort">
+        <p>Showing {sortedProducts.length} products</p>
 
-          <select
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-          >
-            <option value="">Sort by</option>
-            <option value="low-high">Price: Low to High</option>
-            <option value="high-low">Price: High to Low</option>
-            <option value="rating">Rating: High to Low</option>
-            <option value="discount">Discount: High to Low</option>
-          </select>
-        </div>
-              <div className="category-product-grid">
+        <select
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+        >
+          <option value="">Sort by</option>
+          <option value="low-high">Price: Low to High</option>
+          <option value="high-low">Price: High to Low</option>
+          <option value="rating">Rating: High to Low</option>
+          <option value="discount">Discount: High to Low</option>
+        </select>
+      </div>
 
+      <div className="category-product-grid">
         {sortedProducts.map((product) => (
           <div className="category-product-card" key={product._id}>
             <div className="category-product-image">
