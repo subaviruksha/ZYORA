@@ -9,16 +9,6 @@
     padding: 60px 20px;
 }
 
-.cart-continue-btn {
-        padding: 10px 16px;
-        font-size: 13px;
-        border-radius: 8px;
-        margin-bottom: 25px;
-    display: block;
-    width: fit-content;
-    margin-left: auto;
-
-    }
 
 /* ================================
    EMPTY CART
@@ -90,13 +80,19 @@
     margin: 0 auto;
 }
 
-/* CONTINUE SHOPPING BUTTON */
+
+/* ================================
+   CONTINUE SHOPPING BUTTON
+================================ */
 
 .cart-continue-btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
+    width: fit-content;
     gap: 8px;
+    margin-left: 0;
+    margin-right: auto;
     margin-bottom: 30px;
     padding: 11px 20px;
     background: #f0eaff;
@@ -399,7 +395,14 @@
         width: 100%;
     }
 
-    
+    .cart-continue-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        border-radius: 8px;
+        margin-left: 0;
+        margin-right: auto;
+        margin-bottom: 25px;
+    }
 
 }
 
