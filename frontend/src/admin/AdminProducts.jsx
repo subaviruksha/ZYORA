@@ -99,7 +99,7 @@ function AdminProducts() {
         <div>
           <p className="admin-brand">ZYORA</p>
 
-          <h1>Manage Products</h1>
+          <h1>Manage Products Test</h1>
 
           <p>Add, edit and manage your store products.</p>
         </div>
