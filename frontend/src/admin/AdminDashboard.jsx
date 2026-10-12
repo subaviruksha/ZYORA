@@ -14,6 +14,10 @@ function AdminDashboard() {
         pendingOrders: 0
     });
 
+    const [orders, setOrders] = useState([]);
+    const [ordersLoading, setOrdersLoading] = useState(true);
+    const [ordersError, setOrdersError] = useState(false);
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -51,7 +55,43 @@ function AdminDashboard() {
 
         };
 
+        const fetchOrders = async () => {
+
+            try {
+
+                const response = await fetch(
+                    "https://zyora-backend-rhv6.onrender.com/api/admin/orders"
+                );
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch orders");
+                }
+
+                const data = await response.json();
+
+                const orderList = Array.isArray(data)
+                    ? data
+                    : Array.isArray(data.orders)
+                        ? data.orders
+                        : [];
+
+                setOrders(orderList);
+
+            } catch (error) {
+
+                console.log("Orders Error:", error);
+                setOrdersError(true);
+
+            } finally {
+
+                setOrdersLoading(false);
+
+            }
+
+        };
+
         fetchDashboard();
+        fetchOrders();
 
     }, [navigate]);
 
@@ -77,6 +117,26 @@ function AdminDashboard() {
     const handleAccount = () => {
 
         navigate("/admin/account");
+
+    };
+
+
+    const recentOrders = [...orders]
+        .sort((a, b) => {
+            return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        })
+        .slice(0, 5);
+
+
+    const getStatusCount = (status) => {
+
+        return orders.filter((order) => {
+            return (
+                String(order.status || "")
+                    .trim()
+                    .toLowerCase() === status.toLowerCase()
+            );
+        }).length;
 
     };
 
@@ -290,49 +350,155 @@ function AdminDashboard() {
 
                 <div className="admin-section">
 
+                    <div className="admin-recent-header">
+
+                        <h2>
+                            Recent Orders
+                        </h2>
+
+                        <button
+                            className="admin-view-all"
+                            onClick={() => navigate("/admin/orders")}
+                        >
+                            View All →
+                        </button>
+
+                    </div>
+
+
+                    {ordersLoading ? (
+
+                        <p>Loading recent orders...</p>
+
+                    ) : ordersError ? (
+
+                        <p>Unable to load recent orders.</p>
+
+                    ) : recentOrders.length === 0 ? (
+
+                        <p>No orders available yet.</p>
+
+                    ) : (
+
+                        <div className="admin-recent-table-wrapper">
+
+                            <table className="admin-recent-table">
+
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    {recentOrders.map((order) => (
+
+                                        <tr key={order._id}>
+
+                                            <td>
+                                                #{String(order._id).slice(-6).toUpperCase()}
+                                            </td>
+
+                                            <td>
+                                                {order.createdAt
+                                                    ? new Date(order.createdAt).toLocaleDateString("en-IN")
+                                                    : "—"}
+                                            </td>
+
+                                            <td>
+                                                ₹{Number(order.totalAmount || 0).toLocaleString("en-IN")}
+                                            </td>
+
+                                            <td>
+                                                <span className={`admin-order-status ${String(order.status || "pending").toLowerCase()}`}>
+                                                    {order.status || "Pending"}
+                                                </span>
+                                            </td>
+
+                                        </tr>
+
+                                    ))}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    )}
+
+                </div>
+
+
+                <div className="admin-section">
+
                     <h2>
-                        Store Overview
+                        Order Status Overview
                     </h2>
 
 
-                    <div className="admin-overview">
+                    {ordersLoading ? (
 
-                        <p>
-                            Total Products
+                        <p>Loading order statuses...</p>
 
-                            <strong>
-                                {stats.totalProducts}
-                            </strong>
-                        </p>
+                    ) : ordersError ? (
 
+                        <p>Unable to load order statuses.</p>
 
-                        <p>
-                            Total Orders
+                    ) : (
 
-                            <strong>
-                                {stats.totalOrders}
-                            </strong>
-                        </p>
+                        <div className="admin-status-grid">
 
+                            <div className="admin-status-card">
 
-                        <p>
-                            Registered Users
+                                <span>Pending</span>
 
-                            <strong>
-                                {stats.totalUsers}
-                            </strong>
-                        </p>
+                                <strong>
+                                    {getStatusCount("pending")}
+                                </strong>
+
+                            </div>
 
 
-                        <p>
-                            Orders Awaiting Processing
+                            <div className="admin-status-card">
 
-                            <strong>
-                                {stats.pendingOrders}
-                            </strong>
-                        </p>
+                                <span>Shipped</span>
 
-                    </div>
+                                <strong>
+                                    {getStatusCount("shipped")}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="admin-status-card">
+
+                                <span>Delivered</span>
+
+                                <strong>
+                                    {getStatusCount("delivered")}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="admin-status-card">
+
+                                <span>Cancelled</span>
+
+                                <strong>
+                                    {getStatusCount("cancelled")}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    )}
 
                 </div>
 
@@ -346,4 +512,3 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
-

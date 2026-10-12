@@ -1,3 +1,4 @@
+
 .admin-page {
     min-height: 100vh;
     background: #faf9ff;
@@ -303,46 +304,167 @@
 }
 
 
-/* OVERVIEW */
+/* RECENT ORDERS */
 
-.admin-overview {
-    display: grid;
-
-    grid-template-columns: repeat(2, 1fr);
-
+.admin-recent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 15px;
+    margin-bottom: 22px;
 }
 
-.admin-overview p {
+.admin-recent-header h2 {
     margin: 0;
+}
 
-    padding: 16px;
-
-    background: #fbfaff;
-
-    border: 1px solid transparent;
-
+.admin-view-all {
+    background: #f0eaff;
+    color: #6c3df4;
+    border: 1px solid #ded2ff;
     border-radius: 8px;
-
-    color: #777;
-
-    font-size: 14px;
-
-    display: flex;
-
-    justify-content: space-between;
-
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
     transition: 0.3s ease;
 }
 
-.admin-overview p:hover {
-    border-color: #eee9ff;
-
-    background: #f8f5ff;
+.admin-view-all:hover {
+    background: #6c3df4;
+    color: white;
+    border-color: #6c3df4;
 }
 
-.admin-overview strong {
-    color: #333;
+.admin-recent-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #eee9ff;
+    border-radius: 12px;
+}
+
+.admin-recent-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 550px;
+    text-align: left;
+}
+
+.admin-recent-table thead {
+    background: #f7f3ff;
+}
+
+.admin-recent-table th {
+    padding: 16px;
+    color: #6c3df4;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.admin-recent-table td {
+    padding: 16px;
+    color: #444;
+    font-size: 14px;
+    border-top: 1px solid #f0edf7;
+    white-space: nowrap;
+}
+
+.admin-recent-table tbody tr {
+    transition: 0.2s ease;
+}
+
+.admin-recent-table tbody tr:hover {
+    background: #fcfaff;
+}
+
+.admin-recent-table td:first-child {
+    color: #6c3df4;
+    font-weight: 600;
+}
+
+
+/* RECENT ORDER STATUS BADGES */
+
+.admin-order-status {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #f0eaff;
+    color: #6c3df4;
+}
+
+.admin-order-status.pending {
+    background: #fff4df;
+    color: #b7791f;
+}
+
+.admin-order-status.shipped {
+    background: #eaf2ff;
+    color: #3567c8;
+}
+
+.admin-order-status.delivered {
+    background: #e8f8ee;
+    color: #218653;
+}
+
+.admin-order-status.cancelled {
+    background: #ffeaea;
+    color: #d34b4b;
+}
+
+
+/* ORDER STATUS OVERVIEW */
+
+.admin-status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.admin-status-card {
+    position: relative;
+    background: #fbfaff;
+    border: 1px solid #e3dcff;
+    border-radius: 12px;
+    padding: 24px 20px;
+    overflow: hidden;
+    transition: 0.3s ease;
+}
+
+.admin-status-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #6c3df4;
+}
+
+.admin-status-card:hover {
+    background: #f8f4ff;
+    border-color: #cdbdff;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(108, 61, 244, 0.1);
+}
+
+.admin-status-card span {
+    display: block;
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.admin-status-card strong {
+    display: block;
+    color: #6c3df4;
+    font-size: 30px;
+    font-weight: 700;
 }
 
 
@@ -375,6 +497,10 @@
 
     .admin-actions {
         grid-template-columns: 1fr;
+    }
+
+    .admin-status-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
 }
@@ -424,16 +550,63 @@
         grid-template-columns: 1fr;
     }
 
-    .admin-overview {
-        grid-template-columns: 1fr;
-    }
-
     .admin-actions {
         grid-template-columns: 1fr;
     }
 
     .admin-actions button {
         padding: 20px;
+    }
+
+    .admin-section {
+        padding: 20px;
+    }
+
+    .admin-recent-header {
+        gap: 10px;
+    }
+
+    .admin-recent-header h2 {
+        font-size: 18px;
+    }
+
+    .admin-view-all {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+
+    .admin-recent-table th,
+    .admin-recent-table td {
+        padding: 13px;
+        font-size: 12px;
+    }
+
+    .admin-status-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .admin-status-card {
+        padding: 18px 14px;
+    }
+
+    .admin-status-card span {
+        font-size: 12px;
+    }
+
+    .admin-status-card strong {
+        font-size: 26px;
+    }
+
+}
+
+
+/* SMALL MOBILE */
+
+@media (max-width: 400px) {
+
+    .admin-status-grid {
+        grid-template-columns: 1fr;
     }
 
 }
