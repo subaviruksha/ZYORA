@@ -39,7 +39,6 @@ function CategoryProducts() {
         <span>Explore our {category.toLowerCase()} collection.</span>
       </div>
 
-      <div className="category-product-grid">
         <div className="category-sort">
           <p>Showing {sortedProducts.length} products</p>
 
@@ -54,6 +53,7 @@ function CategoryProducts() {
             <option value="discount">Discount: High to Low</option>
           </select>
         </div>
+              <div className="category-product-grid">
 
         {sortedProducts.map((product) => (
           <div className="category-product-card" key={product._id}>
