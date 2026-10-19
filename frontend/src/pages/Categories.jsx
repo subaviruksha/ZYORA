@@ -6,6 +6,71 @@ import Footer from "../components/Footer";
 
 const backendUrl = "https://zyora-backend-rhv6.onrender.com";
 
+function CategoryImage({ products, category }) {
+  const [imageIndex, setImageIndex] = useState(0);
+
+  const categoryProducts = products.filter(
+    (item) =>
+      item.category?.trim().toLowerCase() ===
+        category.trim().toLowerCase() &&
+      typeof item.image === "string" &&
+      item.image.trim() !== ""
+  );
+
+  const getImageUrl = (image) => {
+    const path = image.trim();
+
+    if (
+      path.startsWith("http://") ||
+      path.startsWith("https://") ||
+      path.startsWith("data:") ||
+      path.startsWith("blob:")
+    ) {
+      return path;
+    }
+
+    if (path.startsWith("/productimage/")) {
+      return `${backendUrl}${path}`;
+    }
+
+    if (path.startsWith("productimage/")) {
+      return `${backendUrl}/${path}`;
+    }
+
+    return `${backendUrl}/productimage/${path}`;
+  };
+
+  if (imageIndex >= categoryProducts.length) {
+    return (
+      <div className="categoryplaceholder">
+        No Image Available
+      </div>
+    );
+  }
+
+  const imageUrl = getImageUrl(
+    categoryProducts[imageIndex].image
+  );
+
+  return (
+    <img
+      key={imageUrl}
+      src={imageUrl}
+      alt={category}
+      onError={() => {
+        console.log(
+          "Image failed for",
+          category,
+          ":",
+          imageUrl
+        );
+
+        setImageIndex((previous) => previous + 1);
+      }}
+    />
+  );
+}
+
 function Categories() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,42 +81,20 @@ function Categories() {
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
+
         return response.json();
       })
       .then((data) => {
-        setProducts(Array.isArray(data) ? data : []);
+        console.log("Products from backend:", data);
+
+        setProducts(
+          Array.isArray(data) ? data : []
+        );
       })
       .catch((error) => {
         console.log("Error fetching products:", error);
       });
   }, []);
-
-  const getCategoryImage = (category) => {
-    const product = products.find(
-      (item) =>
-        item.category?.trim().toLowerCase() ===
-          category.trim().toLowerCase() &&
-        item.image
-    );
-
-    if (!product) return "";
-
-    const image = product.image.trim();
-
-    if (
-      image.startsWith("http://") ||
-      image.startsWith("https://") ||
-      image.startsWith("data:")
-    ) {
-      return image;
-    }
-
-    if (image.startsWith("/productimage/")) {
-      return `${backendUrl}${image}`;
-    }
-
-    return `${backendUrl}/productimage/${image}`;
-  };
 
   const categories = [
     {
@@ -96,12 +139,16 @@ function Categories() {
     }
   ];
 
-  const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCategories = categories.filter(
+    (category) =>
+      category.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="categories-page">
+
       <div className="categories-header">
         <p>EXPLORE ZYORA</p>
 
@@ -118,7 +165,9 @@ function Categories() {
             name="categorySearch"
             placeholder="Search categories..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) =>
+              setSearchTerm(e.target.value)
+            }
           />
 
           <span>🔍</span>
@@ -126,40 +175,32 @@ function Categories() {
       </div>
 
       <div className="category-grid">
-        {filteredCategories.map((category) => {
-          const imageUrl = getCategoryImage(category.name);
 
-          return (
-            <Link
-              key={category.name}
-              to={`/category/${encodeURIComponent(category.name)}`}
-              className="categories-card"
-            >
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt={category.name}
-                  onError={(e) => {
-                    console.log("Image failed:", imageUrl);
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-              ) : (
-                <div className="categoryplaceholder">
-                  No Image Available
-                </div>
-              )}
+        {filteredCategories.map((category) => (
+          <Link
+            key={category.name}
+            to={`/category/${encodeURIComponent(
+              category.name
+            )}`}
+            className="categories-card"
+          >
 
-              <h3>
-                {category.name === "Sports & Fitness"
-                  ? "Gym & Fitness"
-                  : category.name}
-              </h3>
+            <CategoryImage
+              products={products}
+              category={category.name}
+            />
 
-              <p>{category.description}</p>
-            </Link>
-          );
-        })}
+            <h3>
+              {category.name === "Sports & Fitness"
+                ? "Gym & Fitness"
+                : category.name}
+            </h3>
+
+            <p>{category.description}</p>
+
+          </Link>
+        ))}
+
       </div>
 
       {filteredCategories.length === 0 && (
@@ -169,6 +210,7 @@ function Categories() {
       )}
 
       <Footer />
+
     </div>
   );
 }
