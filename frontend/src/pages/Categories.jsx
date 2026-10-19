@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import "./Categories.css";
 import Footer from "../components/Footer";
 
-const backendUrl = "https://zyora-backend-rhv6.onrender.com";
-
 function CategoryImage({ products, category }) {
   const [imageIndex, setImageIndex] = useState(0);
 
@@ -18,26 +16,14 @@ function CategoryImage({ products, category }) {
   );
 
   const getImageUrl = (image) => {
-    const path = image.trim();
+    if (!image) return "";
 
-    if (
-      path.startsWith("http://") ||
-      path.startsWith("https://") ||
-      path.startsWith("data:") ||
-      path.startsWith("blob:")
-    ) {
-      return path;
-    }
+    const filename = image
+      .trim()
+      .split("/")
+      .pop();
 
-    if (path.startsWith("/productimage/")) {
-      return `${backendUrl}${path}`;
-    }
-
-    if (path.startsWith("productimage/")) {
-      return `${backendUrl}/${path}`;
-    }
-
-    return `${backendUrl}/productimage/${path}`;
+    return `/productimage/${encodeURIComponent(filename)}`;
   };
 
   if (imageIndex >= categoryProducts.length) {
@@ -76,7 +62,7 @@ function Categories() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetch(`${backendUrl}/api/products`)
+    fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch products");
@@ -85,11 +71,7 @@ function Categories() {
         return response.json();
       })
       .then((data) => {
-        console.log("Products from backend:", data);
-
-        setProducts(
-          Array.isArray(data) ? data : []
-        );
+        setProducts(Array.isArray(data) ? data : []);
       })
       .catch((error) => {
         console.log("Error fetching products:", error);
@@ -179,9 +161,7 @@ function Categories() {
         {filteredCategories.map((category) => (
           <Link
             key={category.name}
-            to={`/category/${encodeURIComponent(
-              category.name
-            )}`}
+            to={`/category/${encodeURIComponent(category.name)}`}
             className="categories-card"
           >
 
