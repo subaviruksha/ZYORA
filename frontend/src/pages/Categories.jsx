@@ -1,17 +1,25 @@
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Categories.css";
 import Footer from "../components/Footer";
+
+const backendUrl = "https://zyora-backend-rhv6.onrender.com";
 
 function Categories() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-fetch("https://zyora-backend-rhv6.onrender.com/api/products")
-      .then((response) => response.json())
+    fetch(`${backendUrl}/api/products`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        return response.json();
+      })
       .then((data) => {
-        setProducts(data);
+        setProducts(Array.isArray(data) ? data : []);
       })
       .catch((error) => {
         console.log("Error fetching products:", error);
@@ -19,9 +27,30 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
   }, []);
 
   const getCategoryImage = (category) => {
-    const product = products.find((item) => item.category === category);
+    const product = products.find(
+      (item) =>
+        item.category?.trim().toLowerCase() ===
+          category.trim().toLowerCase() &&
+        item.image
+    );
 
-    return product ? `/productimage/${product.image}` : "";
+    if (!product) return "";
+
+    const image = product.image.trim();
+
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://") ||
+      image.startsWith("data:")
+    ) {
+      return image;
+    }
+
+    if (image.startsWith("/productimage/")) {
+      return `${backendUrl}${image}`;
+    }
+
+    return `${backendUrl}/productimage/${image}`;
   };
 
   const categories = [
@@ -73,9 +102,7 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
 
   return (
     <div className="categories-page">
-
       <div className="categories-header">
-
         <p>EXPLORE ZYORA</p>
 
         <h1>Shop by Category</h1>
@@ -87,6 +114,8 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
         <div className="category-search">
           <input
             type="text"
+            id="categorySearch"
+            name="categorySearch"
             placeholder="Search categories..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -94,41 +123,44 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
 
           <span>🔍</span>
         </div>
-
       </div>
-
 
       <div className="category-grid">
+        {filteredCategories.map((category) => {
+          const imageUrl = getCategoryImage(category.name);
 
-        {filteredCategories.map((category) => (
+          return (
+            <Link
+              key={category.name}
+              to={`/category/${encodeURIComponent(category.name)}`}
+              className="categories-card"
+            >
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt={category.name}
+                  onError={(e) => {
+                    console.log("Image failed:", imageUrl);
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              ) : (
+                <div className="categoryplaceholder">
+                  No Image Available
+                </div>
+              )}
 
-          <Link
-            key={category.name}
-            to={`/category/${category.name}`}
-            className="categories-card"
-          >
+              <h3>
+                {category.name === "Sports & Fitness"
+                  ? "Gym & Fitness"
+                  : category.name}
+              </h3>
 
-            <img
-              src={getCategoryImage(category.name)}
-              alt={category.name}
-            />
-
-            <h3>
-              {category.name === "Sports & Fitness"
-                ? "Gym & Fitness"
-                : category.name}
-            </h3>
-
-            <p>
-              {category.description}
-            </p>
-
-          </Link>
-
-        ))}
-
+              <p>{category.description}</p>
+            </Link>
+          );
+        })}
       </div>
-
 
       {filteredCategories.length === 0 && (
         <p className="no-category">
@@ -137,7 +169,6 @@ fetch("https://zyora-backend-rhv6.onrender.com/api/products")
       )}
 
       <Footer />
-
     </div>
   );
 }
