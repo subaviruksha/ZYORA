@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminOrders.css";
@@ -22,7 +23,7 @@ function AdminOrders() {
     const fetchOrders = async () => {
         try {
             const response = await fetch(
-"https://zyora-backend-rhv6.onrender.com/api/orders/admin/all"
+                "https://zyora-backend-rhv6.onrender.com/api/orders/admin/all"
             );
 
             const data = await response.json();
@@ -32,7 +33,6 @@ function AdminOrders() {
             } else {
                 alert(data.message || "Error fetching orders");
             }
-
         } catch (error) {
             console.log("Admin Orders Error:", error);
             alert("Unable to load orders");
@@ -41,47 +41,37 @@ function AdminOrders() {
         }
     };
 
-
     const updateOrderStatus = async (orderId, orderStatus) => {
         try {
             const response = await fetch(
-`https://zyora-backend-rhv6.onrender.com/api/orders/admin/${orderId}/status`,
+                `https://zyora-backend-rhv6.onrender.com/api/orders/admin/${orderId}/status`,
                 {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({
-                        orderStatus
-                    })
+                    body: JSON.stringify({ orderStatus })
                 }
             );
 
             const data = await response.json();
 
             if (response.ok) {
-
                 setOrders((previousOrders) =>
                     previousOrders.map((order) =>
                         order._id === orderId
-                            ? {
-                                  ...order,
-                                  orderStatus: orderStatus
-                              }
+                            ? { ...order, orderStatus }
                             : order
                     )
                 );
-
             } else {
                 alert(data.message || "Error updating order status");
             }
-
         } catch (error) {
             console.log("Update Status Error:", error);
             alert("Unable to update order status");
         }
     };
-
 
     const getProductName = (item) => {
         if (item.productId) {
@@ -91,7 +81,6 @@ function AdminOrders() {
         return "Product";
     };
 
-
     if (loading) {
         return (
             <div className="admin-loading">
@@ -100,12 +89,9 @@ function AdminOrders() {
         );
     }
 
-
     return (
         <div className="admin-orders-page">
-
             <header className="admin-orders-header">
-
                 <div>
                     <button
                         className="admin-back-button"
@@ -114,63 +100,36 @@ function AdminOrders() {
                         ← Back to Dashboard
                     </button>
 
-                    <p className="admin-brand">
-                        ZYORA
-                    </p>
+                    <p className="admin-brand">ZYORA</p>
 
-                    <h1>
-                        Manage Orders
-                    </h1>
+                    <h1>Manage Orders</h1>
 
-                    <p>
-                        View and manage customer orders.
-                    </p>
+                    <p>View and manage customer orders.</p>
                 </div>
-
             </header>
 
-
             <div className="admin-orders-container">
-
                 <div className="orders-count-card">
-
                     <div>
                         <span>Total Orders</span>
                         <strong>{orders.length}</strong>
                     </div>
-
                 </div>
 
-
                 {orders.length === 0 ? (
-
                     <div className="no-orders">
-
-                        <h2>
-                            No Orders Found
-                        </h2>
-
-                        <p>
-                            There are no customer orders yet.
-                        </p>
-
+                        <h2>No Orders Found</h2>
+                        <p>There are no customer orders yet.</p>
                     </div>
-
                 ) : (
-
                     <div className="admin-orders-list">
-
                         {orders.map((order) => (
-
                             <div
                                 className="admin-order-card"
                                 key={order._id}
                             >
-
                                 <div className="admin-order-top">
-
                                     <div>
-
                                         <span className="order-label">
                                             ORDER ID
                                         </span>
@@ -178,56 +137,48 @@ function AdminOrders() {
                                         <h2>
                                             #{order._id.slice(-8)}
                                         </h2>
-
                                     </div>
-
 
                                     <div className="order-status-area">
+                                        <label>Order Status</label>
 
-                                        <label>
-                                            Order Status
-                                        </label>
+                                        {order.orderStatus === "Cancelled" ? (
+                                            <span className="cancelled-order-status">
+                                                Cancelled
+                                            </span>
+                                        ) : (
+                                            <select
+                                                value={order.orderStatus}
+                                                onChange={(e) =>
+                                                    updateOrderStatus(
+                                                        order._id,
+                                                        e.target.value
+                                                    )
+                                                }
+                                            >
+                                                <option value="Pending">
+                                                    Pending
+                                                </option>
 
-                                        <select
-                                            value={order.orderStatus}
-                                            onChange={(e) =>
-                                                updateOrderStatus(
-                                                    order._id,
-                                                    e.target.value
-                                                )
-                                            }
-                                        >
+                                                <option value="Confirmed">
+                                                    Confirmed
+                                                </option>
 
-                                            <option value="Pending">
-                                                Pending
-                                            </option>
+                                                <option value="Shipped">
+                                                    Shipped
+                                                </option>
 
-                                            <option value="Processing">
-                                                Processing
-                                            </option>
-
-                                            <option value="Shipped">
-                                                Shipped
-                                            </option>
-
-                                            <option value="Delivered">
-                                                Delivered
-                                            </option>
-
-                                        </select>
-
+                                                <option value="Delivered">
+                                                    Delivered
+                                                </option>
+                                            </select>
+                                        )}
                                     </div>
-
                                 </div>
 
-
                                 <div className="admin-order-date">
-
                                     Ordered on{" "}
-
-                                    {new Date(
-                                        order.createdAt
-                                    ).toLocaleDateString(
+                                    {new Date(order.createdAt).toLocaleDateString(
                                         "en-IN",
                                         {
                                             day: "numeric",
@@ -235,57 +186,37 @@ function AdminOrders() {
                                             year: "numeric"
                                         }
                                     )}
-
                                 </div>
 
-
                                 <div className="admin-order-details">
-
-
                                     <div className="admin-customer">
-
-                                        <h3>
-                                            Customer
-                                        </h3>
+                                        <h3>Customer</h3>
 
                                         <p>
-                                            <strong>
-                                                Name:
-                                            </strong>{" "}
+                                            <strong>Name:</strong>{" "}
                                             {order.userId?.name ||
                                                 order.deliveryAddress?.name ||
                                                 "N/A"}
                                         </p>
 
                                         <p>
-                                            <strong>
-                                                Email:
-                                            </strong>{" "}
-                                            {order.userId?.email ||
-                                                "N/A"}
+                                            <strong>Email:</strong>{" "}
+                                            {order.userId?.email || "N/A"}
                                         </p>
 
                                         <p>
-                                            <strong>
-                                                Phone:
-                                            </strong>{" "}
+                                            <strong>Phone:</strong>{" "}
                                             {order.userId?.phone ||
                                                 order.deliveryAddress?.phone ||
                                                 "N/A"}
                                         </p>
-
                                     </div>
 
-
                                     <div className="admin-delivery">
-
-                                        <h3>
-                                            Delivery Address
-                                        </h3>
+                                        <h3>Delivery Address</h3>
 
                                         <p>
-                                            {order.deliveryAddress?.address ||
-                                                "N/A"}
+                                            {order.deliveryAddress?.address || "N/A"}
                                         </p>
 
                                         <p>
@@ -295,127 +226,81 @@ function AdminOrders() {
 
                                         <p>
                                             Pincode:{" "}
-                                            {order.deliveryAddress?.pincode ||
-                                                "N/A"}
+                                            {order.deliveryAddress?.pincode || "N/A"}
                                         </p>
-
                                     </div>
 
-
                                     <div className="admin-payment">
-
-                                        <h3>
-                                            Payment
-                                        </h3>
+                                        <h3>Payment</h3>
 
                                         <p>
-                                            <strong>
-                                                Method:
-                                            </strong>{" "}
-
+                                            <strong>Method:</strong>{" "}
                                             {order.paymentMethod === "cod"
                                                 ? "Cash on Delivery"
                                                 : "UPI / Card"}
                                         </p>
 
                                         <p>
-                                            <strong>
-                                                Status:
-                                            </strong>{" "}
+                                            <strong>Status:</strong>{" "}
                                             {order.paymentStatus}
                                         </p>
-
                                     </div>
-
                                 </div>
 
-
                                 <div className="admin-products-section">
-
-                                    <h3>
-                                        Products
-                                    </h3>
-
+                                    <h3>Products</h3>
 
                                     <div className="admin-order-products">
-
                                         {order.items.map((item) => (
-
                                             <div
                                                 className="admin-order-product"
                                                 key={item._id}
                                             >
-
                                                 <img
                                                     src={
                                                         item.productId
-                                                            ? `/productimage/${item.productId.image}`
+                                                            ? `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`
                                                             : ""
                                                     }
                                                     alt={getProductName(item)}
                                                 />
 
-
                                                 <div className="admin-product-info">
-
                                                     <strong>
                                                         {getProductName(item)}
                                                     </strong>
 
                                                     <span>
-                                                        Quantity:{" "}
-                                                        {item.quantity}
+                                                        Quantity: {item.quantity}
                                                     </span>
-
                                                 </div>
-
 
                                                 <div className="admin-product-price">
-
                                                     ₹
-                                                    {(
-                                                        item.price *
-                                                        item.quantity
-                                                    ).toLocaleString(
+                                                    {(item.price * item.quantity).toLocaleString(
                                                         "en-IN"
                                                     )}
-
                                                 </div>
-
                                             </div>
-
                                         ))}
-
                                     </div>
-
                                 </div>
 
-
                                 <div className="admin-order-total">
-
-                                    <span>
-                                        Total Amount
-                                    </span>
+                                    <span>Total Amount</span>
 
                                     <strong>
                                         ₹
-                                        {order.totalAmount.toLocaleString(
+                                        {Number(order.totalAmount || 0).toLocaleString(
                                             "en-IN"
                                         )}
                                     </strong>
-
                                 </div>
-
                             </div>
-
                         ))}
-
                     </div>
-
                 )}
-
             </div>
-
         </div>
     );
 }
