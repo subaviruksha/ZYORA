@@ -76,11 +76,7 @@ function AdminOrders() {
     };
 
     const getProductName = (item) => {
-        if (item.productId) {
-            return item.productId.productName || "Product";
-        }
-
-        return "Product";
+        return item.productId?.productName || "Product";
     };
 
     const getProductImage = (item) => {
@@ -90,25 +86,43 @@ function AdminOrders() {
             return "";
         }
 
-        // Keep absolute image URLs unchanged.
-        if (image.startsWith("https://") || image.startsWith("http://")) {
-            return image;
+        const trimmedImage = image.trim();
+
+        if (!trimmedImage) {
+            return "";
         }
 
-        // Remove a leading slash if the database stores one.
-        const imageName = image.replace(/^\/+/, "");
+        // Use an absolute URL if the database already stores one.
+        if (/^https?:\/\//i.test(trimmedImage)) {
+            return trimmedImage;
+        }
 
-        return `${BACKEND_URL}/productimage/${imageName}`;
+        // Handle filenames stored with a leading slash or folder path.
+        const imagePath = trimmedImage.replace(/^\/+/, "");
+
+        // If the database stores "productimage/filename.jpg",
+        // avoid adding the folder name twice.
+        const imageUrl = imagePath.startsWith("productimage/")
+            ? `${BACKEND_URL}/${imagePath}`
+            : `${BACKEND_URL}/productimage/${imagePath}`;
+
+        return imageUrl;
     };
 
     const handleImageError = (event, item) => {
-        console.log(
-            "Product image could not load:",
+        console.error(
+            "Product image failed to load:",
             getProductImage(item)
         );
 
-        // Hide only the broken image; keep product details visible.
-        event.currentTarget.style.visibility = "hidden";
+        // Show a visible fallback instead of a blank image space.
+        event.currentTarget.style.display = "none";
+
+        const fallback = event.currentTarget.nextElementSibling;
+
+        if (fallback) {
+            fallback.style.display = "flex";
+        }
     };
 
     if (loading) {
@@ -283,48 +297,64 @@ function AdminOrders() {
 
                                     <div className="admin-order-products">
                                         {(order.items || []).map(
-                                            (item, index) => (
-                                                <div
-                                                    className="admin-order-product"
-                                                    key={item._id || index}
-                                                >
-                                                    {getProductImage(item) ? (
-                                                        <img
-                                                            src={getProductImage(item)}
-                                                            alt={getProductName(item)}
-                                                            onError={(event) =>
-                                                                handleImageError(
-                                                                    event,
-                                                                    item
-                                                                )
-                                                            }
-                                                        />
-                                                    ) : (
-                                                        <div className="admin-product-image-placeholder">
-                                                            No Image
+                                            (item, index) => {
+                                                const imageUrl =
+                                                    getProductImage(item);
+
+                                                return (
+                                                    <div
+                                                        className="admin-order-product"
+                                                        key={item._id || index}
+                                                    >
+                                                        {imageUrl ? (
+                                                            <>
+                                                                <img
+                                                                    src={imageUrl}
+                                                                    alt={getProductName(item)}
+                                                                    onError={(event) =>
+                                                                        handleImageError(
+                                                                            event,
+                                                                            item
+                                                                        )
+                                                                    }
+                                                                />
+
+                                                                <div
+                                                                    className="admin-product-image-placeholder"
+                                                                    style={{
+                                                                        display: "none"
+                                                                    }}
+                                                                >
+                                                                    Image unavailable
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <div className="admin-product-image-placeholder">
+                                                                No image available
+                                                            </div>
+                                                        )}
+
+                                                        <div className="admin-product-info">
+                                                            <strong>
+                                                                {getProductName(item)}
+                                                            </strong>
+
+                                                            <span>
+                                                                Quantity:{" "}
+                                                                {item.quantity}
+                                                            </span>
                                                         </div>
-                                                    )}
 
-                                                    <div className="admin-product-info">
-                                                        <strong>
-                                                            {getProductName(item)}
-                                                        </strong>
-
-                                                        <span>
-                                                            Quantity:{" "}
-                                                            {item.quantity}
-                                                        </span>
+                                                        <div className="admin-product-price">
+                                                            ₹
+                                                            {(
+                                                                Number(item.price || 0) *
+                                                                Number(item.quantity || 0)
+                                                            ).toLocaleString("en-IN")}
+                                                        </div>
                                                     </div>
-
-                                                    <div className="admin-product-price">
-                                                        ₹
-                                                        {(
-                                                            Number(item.price || 0) *
-                                                            Number(item.quantity || 0)
-                                                        ).toLocaleString("en-IN")}
-                                                    </div>
-                                                </div>
-                                            )
+                                                );
+                                            }
                                         )}
                                     </div>
                                 </div>
