@@ -1,27 +1,26 @@
 const express = require("express");
 const Product = require("../models/product.js");
 const multer = require("multer");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const { v2: cloudinary } = require("cloudinary");
 
 const router = express.Router();
 
 
-const storage = multer.diskStorage({
-
-    destination: (req, file, cb) => {
-
-        cb(null, "productimage/");
-
-    },
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 
-    filename: (req, file, cb) => {
+const storage = new CloudinaryStorage({
 
-        cb(
-            null,
-            Date.now() + path.extname(file.originalname)
-        );
+    cloudinary: cloudinary,
 
+    params: {
+        folder: "zyora-products",
+        allowed_formats: ["jpg", "jpeg", "png", "webp"]
     }
 
 });
@@ -135,7 +134,7 @@ router.post(
                 ...req.body,
 
                 image: req.file
-                    ? req.file.filename
+                    ? req.file.path
                     : ""
 
             });
