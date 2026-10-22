@@ -31,12 +31,12 @@ function AdminOrders() {
             const data = await response.json();
 
             if (response.ok) {
-                setOrders(data);
+                setOrders(Array.isArray(data) ? data : []);
             } else {
                 alert(data.message || "Error fetching orders");
             }
         } catch (error) {
-            console.log("Admin Orders Error:", error);
+            console.error("Admin Orders Error:", error);
             alert("Unable to load orders");
         } finally {
             setLoading(false);
@@ -50,9 +50,9 @@ function AdminOrders() {
                 {
                     method: "PUT",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ orderStatus })
+                    body: JSON.stringify({ orderStatus }),
                 }
             );
 
@@ -70,7 +70,7 @@ function AdminOrders() {
                 alert(data.message || "Error updating order status");
             }
         } catch (error) {
-            console.log("Update Status Error:", error);
+            console.error("Update Status Error:", error);
             alert("Unable to update order status");
         }
     };
@@ -92,19 +92,23 @@ function AdminOrders() {
             return "";
         }
 
-        // Use an absolute URL if the database already stores one.
+        // If the database stores a complete image URL, use it directly.
         if (/^https?:\/\//i.test(trimmedImage)) {
             return trimmedImage;
         }
 
-        // Handle filenames stored with a leading slash or folder path.
+        // Remove leading slashes and avoid duplicating the folder name.
         const imagePath = trimmedImage.replace(/^\/+/, "");
 
-        // If the database stores "productimage/filename.jpg",
-        // avoid adding the folder name twice.
         const imageUrl = imagePath.startsWith("productimage/")
-            ? `${BACKEND_URL}/${imagePath}`
-            : `${BACKEND_URL}/productimage/${imagePath}`;
+            ? `${BACKEND_URL}/${imagePath
+                .split("/")
+                .map(encodeURIComponent)
+                .join("/")}`
+            : `${BACKEND_URL}/productimage/${imagePath
+                .split("/")
+                .map(encodeURIComponent)
+                .join("/")}`;
 
         return imageUrl;
     };
@@ -115,7 +119,6 @@ function AdminOrders() {
             getProductImage(item)
         );
 
-        // Show a visible fallback instead of a blank image space.
         event.currentTarget.style.display = "none";
 
         const fallback = event.currentTarget.nextElementSibling;
@@ -227,7 +230,7 @@ function AdminOrders() {
                                     ).toLocaleDateString("en-IN", {
                                         day: "numeric",
                                         month: "long",
-                                        year: "numeric"
+                                        year: "numeric",
                                     })}
                                 </div>
 
@@ -322,7 +325,7 @@ function AdminOrders() {
                                                                 <div
                                                                     className="admin-product-image-placeholder"
                                                                     style={{
-                                                                        display: "none"
+                                                                        display: "none",
                                                                     }}
                                                                 >
                                                                     Image unavailable
