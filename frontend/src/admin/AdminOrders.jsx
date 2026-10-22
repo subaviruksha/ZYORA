@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminOrders.css";
 
+const BACKEND_URL = "https://zyora-backend-rhv6.onrender.com";
+
 function AdminOrders() {
     const navigate = useNavigate();
 
@@ -23,7 +25,7 @@ function AdminOrders() {
     const fetchOrders = async () => {
         try {
             const response = await fetch(
-                "https://zyora-backend-rhv6.onrender.com/api/orders/admin/all"
+                `${BACKEND_URL}/api/orders/admin/all`
             );
 
             const data = await response.json();
@@ -44,7 +46,7 @@ function AdminOrders() {
     const updateOrderStatus = async (orderId, orderStatus) => {
         try {
             const response = await fetch(
-                `https://zyora-backend-rhv6.onrender.com/api/orders/admin/${orderId}/status`,
+                `${BACKEND_URL}/api/orders/admin/${orderId}/status`,
                 {
                     method: "PUT",
                     headers: {
@@ -75,10 +77,38 @@ function AdminOrders() {
 
     const getProductName = (item) => {
         if (item.productId) {
-            return item.productId.productName;
+            return item.productId.productName || "Product";
         }
 
         return "Product";
+    };
+
+    const getProductImage = (item) => {
+        const image = item.productId?.image;
+
+        if (!image || typeof image !== "string") {
+            return "";
+        }
+
+        // Keep absolute image URLs unchanged.
+        if (image.startsWith("https://") || image.startsWith("http://")) {
+            return image;
+        }
+
+        // Remove a leading slash if the database stores one.
+        const imageName = image.replace(/^\/+/, "");
+
+        return `${BACKEND_URL}/productimage/${imageName}`;
+    };
+
+    const handleImageError = (event, item) => {
+        console.log(
+            "Product image could not load:",
+            getProductImage(item)
+        );
+
+        // Hide only the broken image; keep product details visible.
+        event.currentTarget.style.visibility = "hidden";
     };
 
     if (loading) {
@@ -178,14 +208,13 @@ function AdminOrders() {
 
                                 <div className="admin-order-date">
                                     Ordered on{" "}
-                                    {new Date(order.createdAt).toLocaleDateString(
-                                        "en-IN",
-                                        {
-                                            day: "numeric",
-                                            month: "long",
-                                            year: "numeric"
-                                        }
-                                    )}
+                                    {new Date(
+                                        order.createdAt
+                                    ).toLocaleDateString("en-IN", {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric"
+                                    })}
                                 </div>
 
                                 <div className="admin-order-details">
@@ -216,7 +245,8 @@ function AdminOrders() {
                                         <h3>Delivery Address</h3>
 
                                         <p>
-                                            {order.deliveryAddress?.address || "N/A"}
+                                            {order.deliveryAddress?.address ||
+                                                "N/A"}
                                         </p>
 
                                         <p>
@@ -226,7 +256,8 @@ function AdminOrders() {
 
                                         <p>
                                             Pincode:{" "}
-                                            {order.deliveryAddress?.pincode || "N/A"}
+                                            {order.deliveryAddress?.pincode ||
+                                                "N/A"}
                                         </p>
                                     </div>
 
@@ -242,7 +273,7 @@ function AdminOrders() {
 
                                         <p>
                                             <strong>Status:</strong>{" "}
-                                            {order.paymentStatus}
+                                            {order.paymentStatus || "N/A"}
                                         </p>
                                     </div>
                                 </div>
@@ -251,38 +282,50 @@ function AdminOrders() {
                                     <h3>Products</h3>
 
                                     <div className="admin-order-products">
-                                        {order.items.map((item) => (
-                                            <div
-                                                className="admin-order-product"
-                                                key={item._id}
-                                            >
-                                                <img
-                                                    src={
-                                                        item.productId
-                                                            ? `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`
-                                                            : ""
-                                                    }
-                                                    alt={getProductName(item)}
-                                                />
-
-                                                <div className="admin-product-info">
-                                                    <strong>
-                                                        {getProductName(item)}
-                                                    </strong>
-
-                                                    <span>
-                                                        Quantity: {item.quantity}
-                                                    </span>
-                                                </div>
-
-                                                <div className="admin-product-price">
-                                                    ₹
-                                                    {(item.price * item.quantity).toLocaleString(
-                                                        "en-IN"
+                                        {(order.items || []).map(
+                                            (item, index) => (
+                                                <div
+                                                    className="admin-order-product"
+                                                    key={item._id || index}
+                                                >
+                                                    {getProductImage(item) ? (
+                                                        <img
+                                                            src={getProductImage(item)}
+                                                            alt={getProductName(item)}
+                                                            onError={(event) =>
+                                                                handleImageError(
+                                                                    event,
+                                                                    item
+                                                                )
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <div className="admin-product-image-placeholder">
+                                                            No Image
+                                                        </div>
                                                     )}
+
+                                                    <div className="admin-product-info">
+                                                        <strong>
+                                                            {getProductName(item)}
+                                                        </strong>
+
+                                                        <span>
+                                                            Quantity:{" "}
+                                                            {item.quantity}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="admin-product-price">
+                                                        ₹
+                                                        {(
+                                                            Number(item.price || 0) *
+                                                            Number(item.quantity || 0)
+                                                        ).toLocaleString("en-IN")}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            )
+                                        )}
                                     </div>
                                 </div>
 
@@ -291,9 +334,9 @@ function AdminOrders() {
 
                                     <strong>
                                         ₹
-                                        {Number(order.totalAmount || 0).toLocaleString(
-                                            "en-IN"
-                                        )}
+                                        {Number(
+                                            order.totalAmount || 0
+                                        ).toLocaleString("en-IN")}
                                     </strong>
                                 </div>
                             </div>
