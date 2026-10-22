@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./OrderDetails.css";
@@ -7,28 +8,78 @@ function OrderDetails() {
 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cancelling, setCancelling] = useState(false);
+
+  const fetchOrder = async () => {
+    try {
+      const response = await fetch(
+        `https://zyora-backend-rhv6.onrender.com/api/orders/single/${id}`
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setOrder(data);
+      }
+    } catch (error) {
+      console.log("Error fetching order:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        const response = await fetch(
-`https://zyora-backend-rhv6.onrender.com/api/orders/single/${id}`,
-        );
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setOrder(data);
-        }
-      } catch (error) {
-        console.log("Error fetching order:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchOrder();
   }, [id]);
+
+  const handleCancelOrder = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to cancel this order?"
+    );
+
+    if (!confirmed) return;
+
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      alert("Please log in to cancel your order.");
+      return;
+    }
+
+    try {
+      setCancelling(true);
+
+      const response = await fetch(
+        `https://zyora-backend-rhv6.onrender.com/api/orders/cancel/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Unable to cancel order.");
+        return;
+      }
+
+      setOrder((previousOrder) => ({
+        ...previousOrder,
+        orderStatus: "Cancelled",
+      }));
+
+      alert("Your order has been cancelled successfully!");
+    } catch (error) {
+      console.log("Cancel Order Error:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setCancelling(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -45,9 +96,7 @@ function OrderDetails() {
       <div className="order-details-page">
         <div className="order-not-found">
           <h1>Order Not Found</h1>
-
           <p>We couldn't find this order.</p>
-
           <Link to="/orders">
             <button>Back to My Orders</button>
           </Link>
@@ -57,8 +106,9 @@ function OrderDetails() {
   }
 
   const trackingSteps = ["Pending", "Processing", "Shipped", "Delivered"];
-
   const currentStep = trackingSteps.indexOf(order.orderStatus);
+
+  const canCancel = ["Pending", "Confirmed"].includes(order.orderStatus);
 
   return (
     <div className="order-details-page">
@@ -69,9 +119,7 @@ function OrderDetails() {
           </Link>
 
           <p className="order-details-label">ZYORA</p>
-
           <h1>Order Details</h1>
-
           <p>View complete information about your order.</p>
         </div>
 
@@ -79,7 +127,6 @@ function OrderDetails() {
           <div className="order-info-top">
             <div>
               <span>ORDER ID</span>
-
               <strong>#{order._id.slice(-8)}</strong>
             </div>
 
@@ -94,36 +141,59 @@ function OrderDetails() {
               year: "numeric",
             })}
           </div>
+
+          {canCancel && (
+            <button
+              type="button"
+              className="cancel-order-btn"
+              onClick={handleCancelOrder}
+              disabled={cancelling}
+            >
+              {cancelling ? "Cancelling..." : "Cancel Order"}
+            </button>
+          )}
+
+          {order.orderStatus === "Cancelled" && (
+            <p className="cancelled-message">
+              This order has been cancelled.
+            </p>
+          )}
         </div>
 
         <div className="details-section order-tracking-section">
           <h2>Order Tracking</h2>
 
-          <div className="order-tracking">
-            {trackingSteps.map((step, index) => (
-              <div className="tracking-item" key={step}>
-                <div className="tracking-step">
-                  <span className={index <= currentStep ? "active" : ""}>
-                    {index <= currentStep ? "✓" : ""}
-                  </span>
+          {order.orderStatus === "Cancelled" ? (
+            <p className="cancelled-message">
+              This order was cancelled and will not proceed further.
+            </p>
+          ) : (
+            <div className="order-tracking">
+              {trackingSteps.map((step, index) => (
+                <div className="tracking-item" key={step}>
+                  <div className="tracking-step">
+                    <span className={index <= currentStep ? "active" : ""}>
+                      {index <= currentStep ? "✓" : ""}
+                    </span>
 
-                  <p className={index <= currentStep ? "active-text" : ""}>
-                    {step}
-                  </p>
+                    <p className={index <= currentStep ? "active-text" : ""}>
+                      {step}
+                    </p>
+                  </div>
+
+                  {index < trackingSteps.length - 1 && (
+                    <div
+                      className={
+                        index < currentStep
+                          ? "tracking-line active"
+                          : "tracking-line"
+                      }
+                    ></div>
+                  )}
                 </div>
-
-                {index < trackingSteps.length - 1 && (
-                  <div
-                    className={
-                      index < currentStep
-                        ? "tracking-line active"
-                        : "tracking-line"
-                    }
-                  ></div>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="details-section">
@@ -137,15 +207,13 @@ function OrderDetails() {
                   alt={item.productId.productName}
                   onError={(e) => {
                     e.target.onerror = null;
-e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
+                    e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
                   }}
                 />
 
                 <div className="details-product-info">
                   <h3>{item.productId.productName}</h3>
-
                   <p>Brand: {item.productId.brand}</p>
-
                   <p>Quantity: {item.quantity}</p>
                 </div>
 
@@ -163,15 +231,11 @@ e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.prod
 
             <div className="address-box">
               <strong>{order.deliveryAddress.name}</strong>
-
               <p>{order.deliveryAddress.phone}</p>
-
               <p>{order.deliveryAddress.address}</p>
-
               <p>
                 {order.deliveryAddress.city}, {order.deliveryAddress.state}
               </p>
-
               <p>Pincode: {order.deliveryAddress.pincode}</p>
             </div>
           </div>
@@ -182,7 +246,6 @@ e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.prod
             <div className="payment-box">
               <div className="payment-row">
                 <span>Method</span>
-
                 <strong>
                   {order.paymentMethod === "cod"
                     ? "Cash on Delivery"
@@ -192,7 +255,6 @@ e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.prod
 
               <div className="payment-row">
                 <span>Payment Status</span>
-
                 <strong>{order.paymentStatus}</strong>
               </div>
             </div>
@@ -202,13 +264,11 @@ e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.prod
         <div className="details-summary">
           <div className="summary-line">
             <span>Subtotal</span>
-
             <span>₹{order.totalAmount.toLocaleString("en-IN")}</span>
           </div>
 
           <div className="summary-line">
             <span>Delivery</span>
-
             <span>Free</span>
           </div>
 
@@ -216,7 +276,6 @@ e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.prod
 
           <div className="summary-total-line">
             <strong>Total Amount</strong>
-
             <strong>₹{order.totalAmount.toLocaleString("en-IN")}</strong>
           </div>
         </div>
