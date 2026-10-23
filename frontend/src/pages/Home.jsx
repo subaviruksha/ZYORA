@@ -1,3 +1,4 @@
+
 import "./Home.css";
 import Footer from "../components/Footer";
 import heroImage from "../assets/heropic.png.png";
@@ -22,13 +23,17 @@ function Home() {
             place.
           </p>
 
-<Link to="/products">
+          <Link to="/products">
             <button className="shop-btn">Shop Now</button>
-         </Link>
+          </Link>
         </div>
 
         <div className="hero-image">
-          <img className="heropicinsert" src={heroImage} alt="ZYORA Shopping" />
+          <img
+            className="heropicinsert"
+            src={heroImage}
+            alt="ZYORA Shopping"
+          />
         </div>
       </section>
 
@@ -42,7 +47,10 @@ function Home() {
           <Link to="/category/Mobiles" className="category-link">
             <div className="category-card">
               <div className="category-image">
-                <img src="/productimage/Galaxy S24.jpg" alt="Mobiles" />
+                <img
+                  src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772294/Galaxy_S24.jpg"
+                  alt="Mobiles"
+                />
               </div>
 
               <h3>Mobiles</h3>
@@ -55,7 +63,7 @@ function Home() {
             <div className="category-card">
               <div className="category-image">
                 <img
-                  src="/productimage/Samsung-galaxy-book4.jpg"
+                  src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772403/Samsung-galaxy-book4.webp"
                   alt="Laptops"
                 />
               </div>
@@ -69,7 +77,10 @@ function Home() {
           <Link to="/category/Electronics" className="category-link">
             <div className="category-card">
               <div className="category-image">
-                <img src="/productimage/galaxy-buds-3.jpg" alt="Electronics" />
+                <img
+                  src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772277/galaxy-buds-3.webp"
+                  alt="Electronics"
+                />
               </div>
 
               <h3>Electronics</h3>
@@ -81,7 +92,10 @@ function Home() {
           <Link to="/category/Women's Fashion" className="category-link">
             <div className="category-card">
               <div className="category-image">
-                <img src="/productimage/floral-kurti.jpg" alt="Fashion" />
+                <img
+                  src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772348/floral-kurti.jpg"
+                  alt="Fashion"
+                />
               </div>
 
               <h3>Fashion</h3>
@@ -99,60 +113,84 @@ function Home() {
         <h2>Featured Products</h2>
 
         <div className="product-container">
-            <Link to="/products/6aa3fcd083a9f01edd74da62" className="product-link">
-    
-          <div className="product-card">
-            <div className="product-image">
-              <img src="/productimage/iphone15.jpg" alt="iPhone 15" />
+          <Link
+            to="/products/6aa3fcd083a9f01edd74da62"
+            className="product-link"
+          >
+            <div className="product-card">
+              <div className="product-image">
+                <img
+                  src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772312/iphone15.jpg"
+                  alt="iPhone 15"
+                />
+              </div>
+
+              <h3>iPhone 15</h3>
+
+              <p>Latest Apple smartphone</p>
+
+              <strong>₹69,999</strong>
             </div>
+          </Link>
 
-            <h3>iPhone 15</h3>
+          <Link
+            to="/products/6aa3fcd083a9f01edd74da6b"
+            className="product-link"
+          >
+            <div className="product-card">
+              <div className="product-image">
+                <img
+                  src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772292/HP-pavilion-14.webp"
+                  alt="HP Laptop"
+                />
+              </div>
 
-            <p>Latest Apple smartphone</p>
+              <h3>HP Laptop</h3>
 
-            <strong>₹69,999</strong>
-          </div>
-</Link>
+              <p>Powerful everyday laptop</p>
 
-<Link to="/products/6aa3fcd083a9f01edd74da6b" className="product-link">
-          <div className="product-card">
-            <div className="product-image">
-              <img src="/productimage/HP-pavilion-14.jpg" alt="HP Laptop" />
+              <strong>₹55,999</strong>
             </div>
+          </Link>
 
-            <h3>HP Laptop</h3>
+          <Link
+            to="/products/6aa3fcd083a9f01edd74da6e"
+            className="product-link"
+          >
+            <div className="product-card">
+              <div className="product-image">
+                <img
+                  src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772348/jbl-flip-6.avif"
+                  alt="JBL Speaker"
+                />
+              </div>
 
-            <p>Powerful everyday laptop</p>
+              <h3>JBL Speaker</h3>
 
-            <strong>₹55,999</strong>
-          </div>
-</Link>
+              <p>Premium sound quality</p>
 
-<Link to="/products/6aa3fcd083a9f01edd74da6e" className="product-link">
-          <div className="product-card">
-            <div className="product-image">
-              <img src="/productimage/jbl-flip-6.jpg" alt="JBL Speaker" />
+              <strong>₹2,999</strong>
             </div>
+          </Link>
 
-            <h3>JBL Speaker</h3>
+          <Link
+            to="/products/6aa3fcd083a9f01edd74da6c"
+            className="product-link"
+          >
+            <div className="product-card">
+              <div className="product-image">
+                <img
+                  src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772282/galaxy-watch-7.webp"
+                  alt="Smart Watch"
+                />
+              </div>
 
-            <p>Premium sound quality</p>
+              <h3>Smart Watch</h3>
 
-            <strong>₹2,999</strong>
-          </div>
-</Link>
-<Link to="/products/6aa3fcd083a9f01edd74da6c" className="product-link">
-          <div className="product-card">
-            <div className="product-image">
-              <img src="/productimage/galaxy-watch-7.jpg" alt="Smart Watch" />
+              <p>Smart and stylish</p>
+
+              <strong>₹4,999</strong>
             </div>
-
-            <h3>Smart Watch</h3>
-
-            <p>Smart and stylish</p>
-
-            <strong>₹4,999</strong>
-          </div>
           </Link>
         </div>
       </section>

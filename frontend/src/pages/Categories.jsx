@@ -18,12 +18,17 @@ function CategoryImage({ products, category }) {
   const getImageUrl = (image) => {
     if (!image) return "";
 
-    const filename = image
-      .trim()
-      .split("/")
-      .pop();
+    const trimmedImage = image.trim();
 
-    return `/productimage/${encodeURIComponent(filename)}`;
+    // Use Cloudinary URL directly
+    if (trimmedImage.startsWith("http")) {
+      return trimmedImage;
+    }
+
+    // Support existing local image filenames
+    const filename = trimmedImage.split("/").pop();
+
+    return `https://zyora-backend-rhv6.onrender.com/productimage/${encodeURIComponent(filename)}`;
   };
 
   if (imageIndex >= categoryProducts.length) {

@@ -97,14 +97,19 @@ function MyOrders() {
               <div className="order-products">
                 {order.items.map((item) => (
                   <div className="order-product" key={item._id}>
+
                     <img
-                      src={`/productimage/${item.productId.image}`}
-                      alt={item.productId.productName}
-                      onError={(e) => {
-                        e.target.onerror = null;
-e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
-                      }}
-                    />
+  src={
+    item.productId.image?.startsWith("http")
+      ? item.productId.image
+      : `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`
+  }
+  alt={item.productId.productName}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
+  }}
+/>
 
                     <div className="order-product-info">
                       <h3>{item.productId.productName}</h3>

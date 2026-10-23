@@ -322,14 +322,19 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders
             <div className="checkout-products">
               {cart.items.map((item) => (
                 <div className="checkout-product" key={item.productId._id}>
-                  <img
-                    src={`/productimage/${item.productId.image}`}
-                    alt={item.productId.productName}
-                    onError={(e) => {
-                      e.target.onerror = null;
-e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
-                    }}
-                  />
+
+                <img
+  src={
+    item.productId.image?.startsWith("http")
+      ? item.productId.image
+      : `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`
+  }
+  alt={item.productId.productName}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
+  }}
+/>
 
                   <div>
                     <h3>{item.productId.productName}</h3>
