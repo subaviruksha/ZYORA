@@ -172,11 +172,21 @@ function AdminEditProduct() {
 
                     <div className="edit-product-image">
 
-                       src={
-  product.image?.startsWith("http")
-    ? product.image
-    : `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`
-}
+                       <img
+  src={
+    product.image?.startsWith("http")
+      ? product.image
+      : `/productimage/${product.image}`
+  }
+  alt={product.productName}
+  onError={(e) => {
+    if (!e.currentTarget.dataset.fallback) {
+      e.currentTarget.dataset.fallback = "true";
+      e.currentTarget.src =
+        `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
+    }
+  }}
+/>
 
                     </div>
 
