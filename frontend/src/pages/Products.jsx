@@ -213,7 +213,15 @@ function Products() {
             {sortedProducts.map((product) => (
               <div className="product-card" key={product._id}>
                 <div className="product-image">
-                  <img
+
+                 <img
+  src={
+    product.image?.startsWith("http")
+      ? product.image
+      : `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`
+  }
+  alt={product.productName}
+/> <img
                     src={`/productimage/${product.image}`}
                     alt={product.productName}
                     onError={(e) => {
