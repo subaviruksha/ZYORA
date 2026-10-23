@@ -79,6 +79,7 @@ function AdminOrders() {
         return item.productId?.productName || "Product";
     };
 
+    // Supports Cloudinary URLs and existing local product image filenames.
     const getProductImage = (item) => {
         const image = item.productId?.image;
 
@@ -92,25 +93,24 @@ function AdminOrders() {
             return "";
         }
 
-        // If the database stores a complete image URL, use it directly.
+        // Cloudinary or another complete image URL.
         if (/^https?:\/\//i.test(trimmedImage)) {
             return trimmedImage;
         }
 
-        // Remove leading slashes and avoid duplicating the folder name.
+        // Existing local image filenames or paths.
         const imagePath = trimmedImage.replace(/^\/+/, "");
 
-        const imageUrl = imagePath.startsWith("productimage/")
-            ? `${BACKEND_URL}/${imagePath
-                .split("/")
-                .map(encodeURIComponent)
-                .join("/")}`
-            : `${BACKEND_URL}/productimage/${imagePath
-                .split("/")
-                .map(encodeURIComponent)
-                .join("/")}`;
+        const encodedPath = imagePath
+            .split("/")
+            .map(encodeURIComponent)
+            .join("/");
 
-        return imageUrl;
+        if (imagePath.startsWith("productimage/")) {
+            return `${BACKEND_URL}/${encodedPath}`;
+        }
+
+        return `${BACKEND_URL}/productimage/${encodedPath}`;
     };
 
     const handleImageError = (event, item) => {
@@ -148,9 +148,7 @@ function AdminOrders() {
                     </button>
 
                     <p className="admin-brand">ZYORA</p>
-
                     <h1>Manage Orders</h1>
-
                     <p>View and manage customer orders.</p>
                 </div>
             </header>
@@ -180,7 +178,6 @@ function AdminOrders() {
                                         <span className="order-label">
                                             ORDER ID
                                         </span>
-
                                         <h2>
                                             #{order._id.slice(-8)}
                                         </h2>
@@ -206,15 +203,12 @@ function AdminOrders() {
                                                 <option value="Pending">
                                                     Pending
                                                 </option>
-
                                                 <option value="Confirmed">
                                                     Confirmed
                                                 </option>
-
                                                 <option value="Shipped">
                                                     Shipped
                                                 </option>
-
                                                 <option value="Delivered">
                                                     Delivered
                                                 </option>
@@ -225,31 +219,29 @@ function AdminOrders() {
 
                                 <div className="admin-order-date">
                                     Ordered on{" "}
-                                    {new Date(
-                                        order.createdAt
-                                    ).toLocaleDateString("en-IN", {
-                                        day: "numeric",
-                                        month: "long",
-                                        year: "numeric",
-                                    })}
+                                    {new Date(order.createdAt).toLocaleDateString(
+                                        "en-IN",
+                                        {
+                                            day: "numeric",
+                                            month: "long",
+                                            year: "numeric",
+                                        }
+                                    )}
                                 </div>
 
                                 <div className="admin-order-details">
                                     <div className="admin-customer">
                                         <h3>Customer</h3>
-
                                         <p>
                                             <strong>Name:</strong>{" "}
                                             {order.userId?.name ||
                                                 order.deliveryAddress?.name ||
                                                 "N/A"}
                                         </p>
-
                                         <p>
                                             <strong>Email:</strong>{" "}
                                             {order.userId?.email || "N/A"}
                                         </p>
-
                                         <p>
                                             <strong>Phone:</strong>{" "}
                                             {order.userId?.phone ||
@@ -260,17 +252,14 @@ function AdminOrders() {
 
                                     <div className="admin-delivery">
                                         <h3>Delivery Address</h3>
-
                                         <p>
                                             {order.deliveryAddress?.address ||
                                                 "N/A"}
                                         </p>
-
                                         <p>
                                             {order.deliveryAddress?.city},{" "}
                                             {order.deliveryAddress?.state}
                                         </p>
-
                                         <p>
                                             Pincode:{" "}
                                             {order.deliveryAddress?.pincode ||
@@ -280,14 +269,12 @@ function AdminOrders() {
 
                                     <div className="admin-payment">
                                         <h3>Payment</h3>
-
                                         <p>
                                             <strong>Method:</strong>{" "}
                                             {order.paymentMethod === "cod"
                                                 ? "Cash on Delivery"
                                                 : "UPI / Card"}
                                         </p>
-
                                         <p>
                                             <strong>Status:</strong>{" "}
                                             {order.paymentStatus || "N/A"}
@@ -321,7 +308,6 @@ function AdminOrders() {
                                                                         )
                                                                     }
                                                                 />
-
                                                                 <div
                                                                     className="admin-product-image-placeholder"
                                                                     style={{
@@ -341,7 +327,6 @@ function AdminOrders() {
                                                             <strong>
                                                                 {getProductName(item)}
                                                             </strong>
-
                                                             <span>
                                                                 Quantity:{" "}
                                                                 {item.quantity}
@@ -364,7 +349,6 @@ function AdminOrders() {
 
                                 <div className="admin-order-total">
                                     <span>Total Amount</span>
-
                                     <strong>
                                         ₹
                                         {Number(
