@@ -163,14 +163,16 @@ function AdminProducts() {
             {filteredProducts.map((product) => (
               <div className="admin-product-card" key={product._id}>
                 <div className="admin-product-image">
-                  <img
-                    src={`/productimage/${product.image}`}
-                    alt={product.productName}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`;
-                    }}
-                  />
+
+                <img
+  src={
+    product.image?.startsWith("http")
+      ? product.image
+      : `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`
+  }
+  alt={product.productName}
+/>
+
                 </div>
 
                 <div className="admin-product-info">

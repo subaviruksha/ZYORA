@@ -172,10 +172,11 @@ function AdminEditProduct() {
 
                     <div className="edit-product-image">
 
-                        <img
-                            src={`/productimage/${product.image}`}
-                            alt={product.productName}
-                        />
+                       src={
+  product.image?.startsWith("http")
+    ? product.image
+    : `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`
+}
 
                     </div>
 
