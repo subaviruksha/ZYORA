@@ -1,6 +1,8 @@
+
 import Footer from "../components/Footer";
 import "./About.css";
 import { Link } from "react-router-dom";
+
 function About() {
   return (
     <div className="about-page">
@@ -118,42 +120,58 @@ function About() {
         <div className="find-grid">
           <Link to="/category/Mobiles" className="find-card">
             <div className="find-card">
-              <img src="/productimage/Galaxy S24.jpg" alt="Mobiles" />
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772294/Galaxy_S24.jpg"
+                alt="Mobiles"
+              />
               <h3>Mobiles</h3>
             </div>
           </Link>
 
           <Link to="/category/Laptops" className="find-card">
             <div className="find-card">
-              <img src="/productimage/Samsung-galaxy-book4.jpg" alt="Laptops" />
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772403/Samsung-galaxy-book4.webp"
+                alt="Laptops"
+              />
               <h3>Laptops</h3>
             </div>
           </Link>
 
           <Link to="/category/Electronics" className="find-card">
             <div className="find-card">
-              <img src="/productimage/galaxy-buds-3.jpg" alt="Electronics" />
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772277/galaxy-buds-3.webp"
+                alt="Electronics"
+              />
               <h3>Electronics</h3>
             </div>
           </Link>
 
           <Link to="/category/Stationery" className="find-card">
             <div className="find-card">
-              <img src="/productimage/art-sketchbook.jpg" alt="Stationery" />
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772393/premium-notebook-set.jpg"
+                alt="Stationery"
+              />
               <h3>Stationery</h3>
             </div>
           </Link>
 
           <Link to="/category/Beauty" className="find-card">
             <div className="find-card">
-              <img src="/productimage/herbal-shampoo.jpg" alt="Beauty" />{" "}
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772316/hydrating-moisturizer.jpg"
+                alt="Beauty"
+              />
               <h3>Beauty</h3>
             </div>
           </Link>
+
           <Link to="/category/Home & Kitchen" className="find-card">
             <div className="find-card">
               <img
-                src="/productimage/electric-kettle.jpg"
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772398/rice-cooker.jpg"
                 alt="Home & Kitchen"
               />
               <h3>Home & Kitchen</h3>
@@ -162,14 +180,20 @@ function About() {
 
           <Link to="/category/Sports & Fitness" className="find-card">
             <div className="find-card">
-              <img src="/productimage/dumbbell-set.jpg" alt="Gym & Fitness" />{" "}
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772417/skipping-rope.jpg"
+                alt="Gym & Fitness"
+              />
               <h3>Gym & Fitness</h3>
             </div>
           </Link>
 
           <Link to="/category/Toys" className="find-card">
             <div className="find-card">
-              <img src="/productimage/kids-drawing-kit.jpg" alt="Toys" />{" "}
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772085/1789548684748.jpg"
+                alt="Toys"
+              />
               <h3>Toys</h3>
             </div>
           </Link>
@@ -193,6 +217,7 @@ function About() {
           modern, and enjoyable experience.
         </span>
       </section>
+
       <Footer />
     </div>
   );
