@@ -22,7 +22,7 @@ import AdminEditProducts from "./admin/AdminEditProducts";
 import AdminOrders from "./admin/AdminOrders";
 import AdminAccount from "./admin/AdminAccount";
 import AdminAddProduct from "./admin/AdminAddProduct";
-
+import CancelledOrders from "./pages/CancelledOrders";
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -112,6 +112,11 @@ function App() {
             <Route path="/admin/products/add" element={<AdminAddProduct />} />
             
             <Route path="*" element={<Navigate to="/admin" replace />} />
+
+            <Route
+  path="/admin/cancelled-orders"
+  element={<CancelledOrders />}
+/>
           </>
         )}
 
