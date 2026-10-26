@@ -7,7 +7,6 @@ const Cart = require("../models/cart.js");
 
 const router = express.Router();
 
-
 // Create Order
 router.post("/", async (req, res) => {
     try {
@@ -38,9 +37,7 @@ router.post("/", async (req, res) => {
 
         for (const item of items) {
             const product = await Product.findById(item.productId);
-
             product.stock -= item.quantity;
-
             await product.save();
         }
 
@@ -78,7 +75,6 @@ router.post("/", async (req, res) => {
     }
 });
 
-
 // Get All Orders for Admin
 router.get("/admin/all", async (req, res) => {
     try {
@@ -99,22 +95,53 @@ router.get("/admin/all", async (req, res) => {
     }
 });
 
+// Get Cancelled Orders for Admin
+router.get("/admin/cancelled", async (req, res) => {
+    try {
+        const orders = await Order.find({
+            orderStatus: "Cancelled"
+        })
+            .populate("userId", "name email phone")
+            .populate("items.productId")
+            .sort({ createdAt: -1 });
+
+        res.json(orders);
+
+    } catch (error) {
+        console.log("Cancelled Orders Error:", error);
+
+        res.status(500).json({
+            message: "Error fetching cancelled orders",
+            error: error.message
+        });
+    }
+});
 
 // Update Order Status by Admin
 router.put("/admin/:orderId/status", async (req, res) => {
     try {
-        const { orderStatus } = req.body;
+        const orderStatus = req.body.orderStatus;
 
         const allowedStatuses = [
             "Pending",
-            "Confirmed",
+            "Processing",
             "Shipped",
             "Delivered"
         ];
 
-        if (!allowedStatuses.includes(orderStatus)) {
+        if (
+            typeof orderStatus !== "string" ||
+            !allowedStatuses.includes(orderStatus)
+        ) {
             return res.status(400).json({
-                message: "Invalid order status"
+                message: `Invalid order status received: ${JSON.stringify(orderStatus)}`,
+                allowedStatuses
+            });
+        }
+
+        if (!mongoose.isValidObjectId(req.params.orderId)) {
+            return res.status(400).json({
+                message: "Invalid order ID"
             });
         }
 
@@ -140,14 +167,20 @@ router.put("/admin/:orderId/status", async (req, res) => {
 
         const statusOrder = [
             "Pending",
-            "Confirmed",
+            "Processing",
             "Shipped",
             "Delivered"
         ];
 
+        const currentStatus =
+            order.orderStatus === "Confirmed"
+                ? "Processing"
+                : order.orderStatus;
+
         if (
+            !statusOrder.includes(currentStatus) ||
             statusOrder.indexOf(orderStatus) <
-            statusOrder.indexOf(order.orderStatus)
+            statusOrder.indexOf(currentStatus)
         ) {
             return res.status(400).json({
                 message: "Order status cannot move backwards"
@@ -171,7 +204,6 @@ router.put("/admin/:orderId/status", async (req, res) => {
         });
     }
 });
-
 
 // Cancel Order by Customer
 router.put("/cancel/:orderId", async (req, res) => {
@@ -214,12 +246,16 @@ router.put("/cancel/:orderId", async (req, res) => {
                 };
             }
 
-            if (
-                !["Pending", "Confirmed"].includes(order.orderStatus)
-            ) {
+            const cancellableStatuses = [
+                "Pending",
+                "Processing",
+                "Confirmed"
+            ];
+
+            if (!cancellableStatuses.includes(order.orderStatus)) {
                 throw {
                     status: 400,
-                    message: "This order cannot be cancelled"
+                    message: "This order can no longer be cancelled"
                 };
             }
 
@@ -279,7 +315,6 @@ router.put("/cancel/:orderId", async (req, res) => {
     }
 });
 
-
 // Get Single Order
 router.get("/single/:orderId", async (req, res) => {
     try {
@@ -304,7 +339,6 @@ router.get("/single/:orderId", async (req, res) => {
         });
     }
 });
-
 
 // Get User Orders
 router.get("/:userId", async (req, res) => {
