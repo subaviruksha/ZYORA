@@ -17,7 +17,6 @@ function AdminDashboard() {
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [ordersError, setOrdersError] = useState(false);
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ function AdminDashboard() {
     const fetchDashboard = async () => {
       try {
         const response = await fetch(
-          "https://zyora-backend-rhv6.onrender.com/api/admin/dashboard",
+          "https://zyora-backend-rhv6.onrender.com/api/admin/dashboard"
         );
 
         const data = await response.json();
@@ -108,9 +107,7 @@ function AdminDashboard() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            orderStatus,
-          }),
+          body: JSON.stringify({ orderStatus }),
         }
       );
 
@@ -120,10 +117,7 @@ function AdminDashboard() {
         setOrders((previousOrders) =>
           previousOrders.map((order) =>
             order._id === orderId
-              ? {
-                  ...order,
-                  orderStatus: orderStatus,
-                }
+              ? { ...order, orderStatus }
               : order
           )
         );
@@ -181,16 +175,13 @@ function AdminDashboard() {
       <header className="admin-header">
         <div>
           <p className="admin-brand">ZYORA</p>
-
           <h1>Admin Dashboard</h1>
-
           <p>Manage your store from one place.</p>
         </div>
 
         <div className="admin-header-actions">
           <button className="admin-account-button" onClick={handleAccount}>
             <span className="account-icon">👤</span>
-
             <span>Account</span>
           </button>
 
@@ -204,28 +195,28 @@ function AdminDashboard() {
         <div className="admin-stats">
           <div className="admin-stat-card">
             <span>Products</span>
-
             <strong>{stats.totalProducts}</strong>
           </div>
 
           <div className="admin-stat-card">
             <span>Orders</span>
-
             <strong>{stats.totalOrders}</strong>
           </div>
 
           <div className="admin-stat-card">
             <span>Users</span>
-
             <strong>{stats.totalUsers}</strong>
           </div>
 
           <div className="admin-stat-card">
             <span>Pending Orders</span>
-
-<strong>
-  {ordersLoading ? "..." : ordersError ? "—" : getStatusCount("pending")}
-</strong>
+            <strong>
+              {ordersLoading
+                ? "..."
+                : ordersError
+                  ? "—"
+                  : getStatusCount("pending")}
+            </strong>
           </div>
         </div>
 
@@ -236,31 +227,33 @@ function AdminDashboard() {
             <button onClick={() => navigate("/admin/products")}>
               <div className="admin-action-top">
                 <strong>Manage Products</strong>
-
                 <span className="admin-action-arrow">→</span>
               </div>
-
               <span>Add, edit and delete products</span>
             </button>
 
             <button onClick={() => navigate("/admin/orders")}>
               <div className="admin-action-top">
                 <strong>Manage Orders</strong>
-
                 <span className="admin-action-arrow">→</span>
               </div>
-
               <span>View and update customer orders</span>
             </button>
 
             <button onClick={() => navigate("/admin/users")}>
               <div className="admin-action-top">
                 <strong>Manage Users</strong>
-
                 <span className="admin-action-arrow">→</span>
               </div>
-
               <span>View registered customers</span>
+            </button>
+
+            <button onClick={() => navigate("/admin/cancelled-orders")}>
+              <div className="admin-action-top">
+                <strong>Cancelled Orders</strong>
+                <span className="admin-action-arrow">→</span>
+              </div>
+              <span>View all cancelled customer orders</span>
             </button>
           </div>
         </div>
@@ -351,22 +344,28 @@ function AdminDashboard() {
                       </td>
 
                       <td>
-                        <select
-                          className="admin-recent-status-select"
-                          value={order.orderStatus || "Pending"}
-                          disabled={updatingOrderId !== null}
-                          onChange={(e) =>
-                            updateOrderStatus(
-                              order._id,
-                              e.target.value
-                            )
-                          }
-                        >
-                          <option value="Pending">Pending</option>
-                          <option value="Processing">Processing</option>
-                          <option value="Shipped">Shipped</option>
-                          <option value="Delivered">Delivered</option>
-                        </select>
+                        {order.orderStatus === "Cancelled" ? (
+                          <span className="cancelled-action-text">
+                            No action
+                          </span>
+                        ) : (
+                          <select
+                            className="admin-recent-status-select"
+                            value={order.orderStatus || "Pending"}
+                            disabled={updatingOrderId !== null}
+                            onChange={(e) =>
+                              updateOrderStatus(
+                                order._id,
+                                e.target.value
+                              )
+                            }
+                          >
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                          </select>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -387,25 +386,21 @@ function AdminDashboard() {
             <div className="admin-status-grid">
               <div className="admin-status-card">
                 <span>Pending</span>
-
                 <strong>{getStatusCount("pending")}</strong>
               </div>
 
               <div className="admin-status-card">
                 <span>Processing</span>
-
                 <strong>{getStatusCount("processing")}</strong>
               </div>
 
               <div className="admin-status-card">
                 <span>Shipped</span>
-
                 <strong>{getStatusCount("shipped")}</strong>
               </div>
 
               <div className="admin-status-card">
                 <span>Delivered</span>
-
                 <strong>{getStatusCount("delivered")}</strong>
               </div>
             </div>
