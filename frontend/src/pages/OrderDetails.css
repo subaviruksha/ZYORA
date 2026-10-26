@@ -9,6 +9,13 @@
     margin: auto;
 }
 
+.details-status.cancelled-status {
+  background-color: #ffe1e1 !important;
+  color: #dc2626 !important;
+  border: 1px solid #fecaca;
+}
+
+
 
 .cancel-order-btn {
   margin-top: 20px;

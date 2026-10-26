@@ -167,3 +167,29 @@
     padding: 17px;
   }
 }
+
+.cancelled-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.cancelled-summary-grid .orders-count-card {
+    width: 100%;
+}
+
+.cancelled-orders-page .cancelled-order-status {
+    display: inline-block;
+    padding: 12px 18px;
+    border-radius: 10px;
+    background: #ffe1e1;
+    color: #c62828;
+    font-weight: 600;
+}
+
+@media (max-width: 700px) {
+    .cancelled-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}

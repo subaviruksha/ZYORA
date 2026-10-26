@@ -22,7 +22,7 @@ import AdminEditProducts from "./admin/AdminEditProducts";
 import AdminOrders from "./admin/AdminOrders";
 import AdminAccount from "./admin/AdminAccount";
 import AdminAddProduct from "./admin/AdminAddProduct";
-import CancelledOrders from "./pages/CancelledOrders";
+import CancelledOrders from "./admin/Cancelledorders";
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -90,35 +90,39 @@ function App() {
           </>
         )}
 
-        {/* ADMIN ROUTES */}
+     
+{/* ADMIN ROUTES */}
 
-        {isLoggedIn && role === "admin" && (
-          <>
-            <Route path="/admin" element={<AdminDashboard />} />
+{isLoggedIn && role === "admin" && (
+  <>
+    <Route path="/admin" element={<AdminDashboard />} />
 
-            <Route path="/admin/products" element={<AdminProducts />} />
+    <Route path="/admin/products" element={<AdminProducts />} />
 
-            <Route
-              path="/admin/products/edit/:id"
-              element={<AdminEditProducts />}
-            />
+    <Route
+      path="/admin/products/edit/:id"
+      element={<AdminEditProducts />}
+    />
 
-            <Route path="/admin/orders" element={<AdminOrders />} />
+    <Route path="/admin/orders" element={<AdminOrders />} />
 
-            <Route path="/admin/users" element={<AdminUsers />} />
+    <Route path="/admin/users" element={<AdminUsers />} />
 
-            <Route path="/admin/account" element={<AdminAccount />} />
+    <Route path="/admin/account" element={<AdminAccount />} />
 
-            <Route path="/admin/products/add" element={<AdminAddProduct />} />
-            
-            <Route path="*" element={<Navigate to="/admin" replace />} />
+    <Route path="/admin/products/add" element={<AdminAddProduct />} />
 
-            <Route
-  path="/admin/cancelled-orders"
-  element={<CancelledOrders />}
-/>
-          </>
-        )}
+    {/* Cancelled Orders page */}
+    <Route
+      path="/admin/cancelled-orders"
+      element={<CancelledOrders />}
+    />
+
+    {/* Keep wildcard route last */}
+    <Route path="*" element={<Navigate to="/admin" replace />} />
+  </>
+)}
+
 
         {/* NOT LOGGED IN */}
 

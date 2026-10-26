@@ -129,7 +129,14 @@ const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
               <strong>#{order._id.slice(-8)}</strong>
             </div>
 
-            <div className="details-status">{order.orderStatus}</div>
+ <div
+  className={`details-status ${
+    order.orderStatus === "Cancelled" ? "cancelled-status" : ""
+  }`}
+>
+  {order.orderStatus}
+</div>
+
           </div>
 
           <div className="details-date">

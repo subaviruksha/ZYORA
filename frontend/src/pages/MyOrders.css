@@ -360,3 +360,11 @@
     }
 
 }
+
+.order-status.cancelled-status {
+  background-color: #ffe1e1 !important;
+  color: #dc2626 !important;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-weight: 600;
+}

@@ -86,7 +86,13 @@ function MyOrders() {
                   <strong>#{order._id.slice(-8)}</strong>
                 </div>
 
-                <div className="order-status">{order.orderStatus}</div>
+<div
+  className={`order-status ${
+    order.orderStatus === "Cancelled" ? "cancelled-status" : ""
+  }`}
+>
+  {order.orderStatus}
+</div>                
               </div>
 
               <div className="order-date">

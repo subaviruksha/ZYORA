@@ -204,8 +204,8 @@ function AdminOrders() {
                                                     Pending
                                                 </option>
                                              <option value="Processing">
-    Processing
-</option>
+                                                        Processing
+                                                        </option>
                                                 <option value="Shipped">
                                                     Shipped
                                                 </option>
