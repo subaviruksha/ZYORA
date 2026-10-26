@@ -108,8 +108,7 @@ function OrderDetails() {
   const trackingSteps = ["Pending", "Processing", "Shipped", "Delivered"];
   const currentStep = trackingSteps.indexOf(order.orderStatus);
 
-  const canCancel = ["Pending", "Confirmed"].includes(order.orderStatus);
-
+const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
   return (
     <div className="order-details-page">
       <div className="order-details-container">
