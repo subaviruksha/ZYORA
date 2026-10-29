@@ -34,7 +34,7 @@ function ScrollToTop() {
 }
 
 function App() {
-
+//  checks the details in localStorage
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   const role = localStorage.getItem("role");
@@ -91,7 +91,7 @@ function App() {
             <Route path="/orders/:id" element={<OrderDetails />} />
 
             <Route path="/account" element={<Account />} />
-
+                wrong url direct to home page 
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         )}
@@ -131,7 +131,7 @@ function App() {
 
 
         {/* NOT LOGGED IN */}
-
+       {/* manual type of url without login redierct to home login */}
         {!isLoggedIn && (
           <Route path="*" element={<Navigate to="/login" replace />} />
         )}

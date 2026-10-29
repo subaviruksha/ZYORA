@@ -1,7 +1,6 @@
 
 import "./Home.css";
 import Footer from "../components/Footer";
-import heroImage from "../assets/heropic.png.png";
 import { Link } from "react-router-dom";
 
 function Home() {
