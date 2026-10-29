@@ -14,12 +14,36 @@ router.post("/", async (req, res) => {
             userId,
             deliveryAddress,
             items,
-            totalAmount,
             paymentMethod,
             isBuyNow
         } = req.body;
 
+        if (!userId || !mongoose.isValidObjectId(userId)) {
+            return res.status(400).json({
+                message: "Valid user ID is required"
+            });
+        }
+
+        if (!Array.isArray(items) || items.length === 0) {
+            return res.status(400).json({
+                message: "Order items are required"
+            });
+        }
+
+        // Check product availability and calculate total
+        let calculatedTotal = 0;
+
         for (const item of items) {
+            if (
+                !mongoose.isValidObjectId(item.productId) ||
+                !Number.isInteger(Number(item.quantity)) ||
+                Number(item.quantity) <= 0
+            ) {
+                return res.status(400).json({
+                    message: "Invalid product or quantity"
+                });
+            }
+
             const product = await Product.findById(item.productId);
 
             if (!product) {
@@ -28,29 +52,65 @@ router.post("/", async (req, res) => {
                 });
             }
 
-            if (product.stock < item.quantity) {
+            if (product.stock < Number(item.quantity)) {
                 return res.status(400).json({
                     message: `${product.productName} has only ${product.stock} item(s) available`
                 });
             }
+
+            calculatedTotal += product.price * Number(item.quantity);
         }
 
+        calculatedTotal = Math.round(calculatedTotal * 100) / 100;
+
+        // Check for a previous non-cancelled order
+        const previousOrder = await Order.findOne({
+            userId,
+            orderStatus: { $ne: "Cancelled" }
+        });
+
+        // Apply 10% discount to the first order
+        const discount = previousOrder
+            ? 0
+            : Math.round(calculatedTotal * 10) / 100;
+
+        const finalAmount = Math.max(
+            0,
+            Math.round((calculatedTotal - discount) * 100) / 100
+        );
+
+        // Reduce product stock
         for (const item of items) {
             const product = await Product.findById(item.productId);
-            product.stock -= item.quantity;
+
+            if (product.stock < Number(item.quantity)) {
+                return res.status(400).json({
+                    message: `${product.productName} no longer has enough stock`
+                });
+            }
+
+            product.stock -= Number(item.quantity);
             await product.save();
         }
 
+        // Save order with discount details
         const order = new Order({
             userId,
             deliveryAddress,
-            items,
-            totalAmount,
-            paymentMethod
+            items: items.map((item) => ({
+                productId: item.productId,
+                quantity: Number(item.quantity),
+                price: item.price
+            })),
+            originalAmount: calculatedTotal,
+            discount,
+            totalAmount: finalAmount,
+            paymentMethod: paymentMethod || "cod"
         });
 
         await order.save();
 
+        // Clear cart except for Buy Now orders
         if (!isBuyNow) {
             const cart = await Cart.findOne({ userId });
 
@@ -62,7 +122,10 @@ router.post("/", async (req, res) => {
 
         res.json({
             message: "Order created successfully",
-            order
+            order,
+            originalAmount: calculatedTotal,
+            discount,
+            discountApplied: !previousOrder
         });
 
     } catch (error) {
