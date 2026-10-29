@@ -75,12 +75,15 @@ router.post("/", async (req, res) => {
         if (previousOrdersCount === 0) {
             discount = Math.round(calculatedTotal * 10) / 100;
         }
-
-        // 3rd, 5th, 7th orders, etc.: 5% discount
-        else if (previousOrdersCount % 2 === 0) {
+        // Third, fifth, seventh, ninth orders, etc.: 5% discount
+        else if (
+            previousOrdersCount >= 2 &&
+            previousOrdersCount % 2 === 0
+        ) {
             discount = Math.round(calculatedTotal * 5) / 100;
         }
 
+        // Calculate final amount
         const finalAmount = Math.max(
             0,
             Math.round((calculatedTotal - discount) * 100) / 100
