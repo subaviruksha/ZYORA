@@ -105,12 +105,18 @@ function OrderDetails() {
     );
   }
 
-  const originalAmount = Number(
-    order.originalAmount ?? order.totalAmount
-  );
-
   const discount = Number(order.discount ?? 0);
   const totalAmount = Number(order.totalAmount ?? 0);
+
+  const originalAmount =
+    order.originalAmount != null
+      ? Number(order.originalAmount)
+      : totalAmount + discount;
+
+  const discountPercentage =
+    originalAmount > 0
+      ? Math.round((discount / originalAmount) * 100)
+      : 0;
 
   const trackingSteps = [
     "Pending",
@@ -126,7 +132,7 @@ function OrderDetails() {
   );
 
   const formatPrice = (amount) =>
-    Number(amount).toLocaleString("en-IN", {
+    Number(amount || 0).toLocaleString("en-IN", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
@@ -233,8 +239,11 @@ function OrderDetails() {
           <h2>Products</h2>
 
           <div className="details-products">
-            {order.items.map((item) => (
-              <div className="details-product" key={item._id}>
+            {order.items.map((item, index) => (
+              <div
+                className="details-product"
+                key={item._id || `${order._id}-${index}`}
+              >
                 <img
                   src={
                     item.productId?.image?.startsWith("http")
@@ -255,7 +264,7 @@ function OrderDetails() {
                 </div>
 
                 <div className="details-product-price">
-                  ₹{Number(item.price).toLocaleString("en-IN")}
+                  ₹{formatPrice(item.price)}
                 </div>
               </div>
             ))}
@@ -267,14 +276,14 @@ function OrderDetails() {
             <h2>Delivery Address</h2>
 
             <div className="address-box">
-              <strong>{order.deliveryAddress.name}</strong>
-              <p>{order.deliveryAddress.phone}</p>
-              <p>{order.deliveryAddress.address}</p>
+              <strong>{order.deliveryAddress?.name}</strong>
+              <p>{order.deliveryAddress?.phone}</p>
+              <p>{order.deliveryAddress?.address}</p>
               <p>
-                {order.deliveryAddress.city},{" "}
-                {order.deliveryAddress.state}
+                {order.deliveryAddress?.city},{" "}
+                {order.deliveryAddress?.state}
               </p>
-              <p>Pincode: {order.deliveryAddress.pincode}</p>
+              <p>Pincode: {order.deliveryAddress?.pincode}</p>
             </div>
           </div>
 
@@ -307,7 +316,14 @@ function OrderDetails() {
 
           {discount > 0 && (
             <div className="summary-line">
-              <span>First Order Discount (10%)</span>
+              <span>
+                {discountPercentage === 10
+                  ? "First Order Discount (10%)"
+                  : discountPercentage === 5
+                  ? "Repeat Customer Discount (5%)"
+                  : `Discount (${discountPercentage}%)`}
+              </span>
+
               <span style={{ color: "green" }}>
                 -₹{formatPrice(discount)}
               </span>
@@ -325,6 +341,12 @@ function OrderDetails() {
             <strong>Total Amount</strong>
             <strong>₹{formatPrice(totalAmount)}</strong>
           </div>
+
+          {discount > 0 && (
+            <p className="cancelled-message">
+              You saved ₹{formatPrice(discount)} on this order!
+            </p>
+          )}
         </div>
       </div>
     </div>

@@ -89,7 +89,6 @@ function MyOrders() {
         <div className="orders-list">
           {orders.map((order) => {
             const discount = Number(order.discount || 0);
-
             const totalAmount = Number(order.totalAmount || 0);
 
             const originalAmount =
@@ -97,20 +96,24 @@ function MyOrders() {
                 ? Number(order.originalAmount)
                 : totalAmount + discount;
 
+            const discountPercentage =
+              originalAmount > 0
+                ? Math.round((discount / originalAmount) * 100)
+                : 0;
+
+            const isCancelled = order.orderStatus === "Cancelled";
+
             return (
               <div className="order-card" key={order._id}>
                 <div className="order-top">
                   <div>
                     <span>ORDER ID</span>
-
                     <strong>#{order._id.slice(-8)}</strong>
                   </div>
 
                   <div
                     className={`order-status ${
-                      order.orderStatus === "Cancelled"
-                        ? "cancelled-status"
-                        : ""
+                      isCancelled ? "cancelled-status" : ""
                     }`}
                   >
                     {order.orderStatus}
@@ -124,27 +127,39 @@ function MyOrders() {
 
                 {discount > 0 && (
                   <div className="first-order-offer">
-                    <div>🎉 First Order Discount Applied!</div>
+                    <div>
+                      🎉{" "}
+                      {discountPercentage === 10
+                        ? "First Order Discount Applied!"
+                        : discountPercentage === 5
+                        ? "Repeat Customer Discount Applied!"
+                        : "Special Discount Applied!"}
+                    </div>
 
                     <p>
-                      You received a 10% discount on your first order.
-                      You saved ₹{formatPrice(discount)}!
+                      {discountPercentage === 10
+                        ? "You received 10% off your first order."
+                        : discountPercentage === 5
+                        ? "Thank you for shopping again with ZYORA! You received 5% off."
+                        : `You received a ${discountPercentage}% discount.`}
+                      {" "}You saved ₹{formatPrice(discount)}!
                     </p>
                   </div>
                 )}
 
                 <div className="order-products">
-                  {order.items.map((item) => (
-                    <div className="order-product" key={item._id}>
+                  {order.items.map((item, index) => (
+                    <div
+                      className="order-product"
+                      key={item._id || `${order._id}-${index}`}
+                    >
                       <img
                         src={
                           item.productId?.image?.startsWith("http")
                             ? item.productId.image
                             : `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId?.image || ""}`
                         }
-                        alt={
-                          item.productId?.productName || "Product"
-                        }
+                        alt={item.productId?.productName || "Product"}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId?.image || ""}`;
@@ -187,12 +202,13 @@ function MyOrders() {
                       <>
                         <div className="order-price-row">
                           <span>Original Amount</span>
-
                           <strong>₹{formatPrice(originalAmount)}</strong>
                         </div>
 
                         <div className="order-price-row first-order-discount">
-                          <span>First-order discount (10%)</span>
+                          <span>
+                            Discount ({discountPercentage}%)
+                          </span>
 
                           <strong>−₹{formatPrice(discount)}</strong>
                         </div>
@@ -200,7 +216,6 @@ function MyOrders() {
                     )}
 
                     <span>Total</span>
-
                     <strong>₹{formatPrice(totalAmount)}</strong>
                   </div>
                 </div>
