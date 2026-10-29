@@ -456,3 +456,162 @@
     }
 
 }
+
+
+/* First Order Gift Card */
+
+.first-order-gift-card {
+    position: relative;
+    overflow: hidden;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #e1d2ff;
+    border-radius: 16px;
+    background: linear-gradient(
+        135deg,
+        #f5efff 0%,
+        #ffffff 55%,
+        #eee5ff 100%
+    );
+    box-shadow: 0 5px 18px rgba(109, 40, 217, 0.09);
+}
+
+.gift-card-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.gift-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    font-size: 27px;
+    box-shadow: 0 4px 10px rgba(109, 40, 217, 0.2);
+}
+
+.gift-card-heading {
+    flex: 1;
+}
+
+.gift-welcome {
+    color: #7c3aed;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.gift-card-heading h3 {
+    margin: 5px 0;
+    color: #351568;
+    font-size: 18px;
+    font-weight: 750;
+}
+
+.gift-card-heading p {
+    margin: 0;
+    color: #716681;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.gift-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #d5c2ff;
+}
+
+.gift-offer-label {
+    color: #6d28d9;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.gift-offer-badge {
+    padding: 7px 12px;
+    border-radius: 8px;
+    background: #6d28d9;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.gift-card-savings {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.gift-card-savings span {
+    color: #5e5270;
+    font-size: 13px;
+}
+
+.gift-card-savings strong {
+    color: #15803d;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+/* First-order discount summary row */
+
+.checkout-summary .first-order-discount {
+    color: #15803d;
+    font-weight: 600;
+}
+
+/* Mobile responsive */
+
+@media (max-width: 480px) {
+    .first-order-gift-card {
+        padding: 15px;
+    }
+
+    .gift-card-top {
+        gap: 10px;
+    }
+
+    .gift-icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        font-size: 23px;
+    }
+
+    .gift-card-heading h3 {
+        font-size: 16px;
+    }
+
+    .gift-card-heading p {
+        font-size: 11px;
+    }
+
+    .gift-offer-label {
+        font-size: 9px;
+    }
+
+    .gift-offer-badge {
+        padding: 6px 9px;
+        font-size: 11px;
+    }
+
+    .gift-card-savings strong {
+        font-size: 16px;
+    }
+}

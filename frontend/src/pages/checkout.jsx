@@ -70,7 +70,7 @@ function Checkout() {
     }
   }, [userId, isBuyNow]);
 
-  // Check whether the customer has placed a previous non-cancelled order
+  // Check previous orders for first-order eligibility
   useEffect(() => {
     const fetchPreviousOrders = async () => {
       if (!userId) {
@@ -116,7 +116,6 @@ function Checkout() {
       <div className="checkout-page">
         <div className="checkout-empty">
           <h1>Your Cart is Empty</h1>
-
           <p>Add some products before proceeding to checkout.</p>
 
           <Link to="/products">
@@ -140,6 +139,12 @@ function Checkout() {
     0,
     Math.round((subtotal - discount) * 100) / 100
   );
+
+  const formatPrice = (amount) =>
+    Number(amount).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   const handleConfirmAddress = () => {
     if (!name || !phone || !address || !city || !state || !pincode) {
@@ -197,9 +202,7 @@ function Checkout() {
       })),
 
       totalAmount: finalTotal,
-
       paymentMethod: paymentMethod,
-
       isBuyNow: isBuyNow,
     };
 
@@ -208,11 +211,9 @@ function Checkout() {
         "https://zyora-backend-rhv6.onrender.com/api/orders",
         {
           method: "POST",
-
           headers: {
             "Content-Type": "application/json",
           },
-
           body: JSON.stringify(orderData),
         }
       );
@@ -247,9 +248,7 @@ function Checkout() {
       <div className="checkout-container">
         <div className="checkout-header">
           <p>ZYORA CHECKOUT</p>
-
           <h1>Checkout</h1>
-
           <span>Complete your order details</span>
         </div>
 
@@ -407,12 +406,45 @@ function Checkout() {
               <span>₹{subtotal.toLocaleString("en-IN")}</span>
             </div>
 
+            {/* Attractive first-order discount card */}
+            {hasPreviousOrder === false && (
+              <div className="first-order-gift-card">
+                <div className="gift-card-top">
+                  <div className="gift-icon">🎁</div>
+
+                  <div className="gift-card-heading">
+                    <span className="gift-welcome">
+                      WELCOME TO ZYORA
+                    </span>
+
+                    <h3>A Little Gift for You!</h3>
+
+                    <p>
+                      Your first purchase deserves something special.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="gift-card-bottom">
+                  <span className="gift-offer-label">
+                    FIRST ORDER OFFER
+                  </span>
+
+                  <span className="gift-offer-badge">10% OFF</span>
+                </div>
+
+                <div className="gift-card-savings">
+                  <span>You save</span>
+
+                  <strong>₹{formatPrice(discount)}</strong>
+                </div>
+              </div>
+            )}
+
             {hasPreviousOrder === false && (
               <div className="summary-row first-order-discount">
                 <span>First-order discount (10%)</span>
-                <span>
-                  −₹{discount.toLocaleString("en-IN")}
-                </span>
+                <span>-₹{formatPrice(discount)}</span>
               </div>
             )}
 
@@ -438,9 +470,7 @@ function Checkout() {
 
             <div className="summary-total">
               <span>Total</span>
-              <strong>
-                ₹{finalTotal.toLocaleString("en-IN")}
-              </strong>
+              <strong>₹{formatPrice(finalTotal)}</strong>
             </div>
 
             <button
