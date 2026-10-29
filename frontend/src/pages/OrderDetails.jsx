@@ -105,10 +105,32 @@ function OrderDetails() {
     );
   }
 
-  const trackingSteps = ["Pending", "Processing", "Shipped", "Delivered"];
+  const originalAmount = Number(
+    order.originalAmount ?? order.totalAmount
+  );
+
+  const discount = Number(order.discount ?? 0);
+  const totalAmount = Number(order.totalAmount ?? 0);
+
+  const trackingSteps = [
+    "Pending",
+    "Processing",
+    "Shipped",
+    "Delivered",
+  ];
+
   const currentStep = trackingSteps.indexOf(order.orderStatus);
 
-const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
+  const canCancel = ["Pending", "Processing"].includes(
+    order.orderStatus
+  );
+
+  const formatPrice = (amount) =>
+    Number(amount).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
   return (
     <div className="order-details-page">
       <div className="order-details-container">
@@ -129,14 +151,15 @@ const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
               <strong>#{order._id.slice(-8)}</strong>
             </div>
 
- <div
-  className={`details-status ${
-    order.orderStatus === "Cancelled" ? "cancelled-status" : ""
-  }`}
->
-  {order.orderStatus}
-</div>
-
+            <div
+              className={`details-status ${
+                order.orderStatus === "Cancelled"
+                  ? "cancelled-status"
+                  : ""
+              }`}
+            >
+              {order.orderStatus}
+            </div>
           </div>
 
           <div className="details-date">
@@ -182,7 +205,11 @@ const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
                       {index <= currentStep ? "✓" : ""}
                     </span>
 
-                    <p className={index <= currentStep ? "active-text" : ""}>
+                    <p
+                      className={
+                        index <= currentStep ? "active-text" : ""
+                      }
+                    >
                       {step}
                     </p>
                   </div>
@@ -208,28 +235,27 @@ const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
           <div className="details-products">
             {order.items.map((item) => (
               <div className="details-product" key={item._id}>
-
                 <img
-  src={
-    item.productId.image?.startsWith("http")
-      ? item.productId.image
-      : `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`
-  }
-  alt={item.productId.productName}
-  onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
-  }}
-/>
+                  src={
+                    item.productId?.image?.startsWith("http")
+                      ? item.productId.image
+                      : `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId?.image || ""}`
+                  }
+                  alt={item.productId?.productName || "Product"}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId?.image || ""}`;
+                  }}
+                />
 
                 <div className="details-product-info">
-                  <h3>{item.productId.productName}</h3>
-                  <p>Brand: {item.productId.brand}</p>
+                  <h3>{item.productId?.productName || "Product"}</h3>
+                  <p>Brand: {item.productId?.brand || "N/A"}</p>
                   <p>Quantity: {item.quantity}</p>
                 </div>
 
                 <div className="details-product-price">
-                  ₹{item.price.toLocaleString("en-IN")}
+                  ₹{Number(item.price).toLocaleString("en-IN")}
                 </div>
               </div>
             ))}
@@ -245,7 +271,8 @@ const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
               <p>{order.deliveryAddress.phone}</p>
               <p>{order.deliveryAddress.address}</p>
               <p>
-                {order.deliveryAddress.city}, {order.deliveryAddress.state}
+                {order.deliveryAddress.city},{" "}
+                {order.deliveryAddress.state}
               </p>
               <p>Pincode: {order.deliveryAddress.pincode}</p>
             </div>
@@ -275,8 +302,17 @@ const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
         <div className="details-summary">
           <div className="summary-line">
             <span>Subtotal</span>
-            <span>₹{order.totalAmount.toLocaleString("en-IN")}</span>
+            <span>₹{formatPrice(originalAmount)}</span>
           </div>
+
+          {discount > 0 && (
+            <div className="summary-line">
+              <span>First Order Discount (10%)</span>
+              <span style={{ color: "green" }}>
+                -₹{formatPrice(discount)}
+              </span>
+            </div>
+          )}
 
           <div className="summary-line">
             <span>Delivery</span>
@@ -287,7 +323,7 @@ const canCancel = ["Pending", "Processing"].includes(order.orderStatus);
 
           <div className="summary-total-line">
             <strong>Total Amount</strong>
-            <strong>₹{order.totalAmount.toLocaleString("en-IN")}</strong>
+            <strong>₹{formatPrice(totalAmount)}</strong>
           </div>
         </div>
       </div>
