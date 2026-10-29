@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Checkout.css";
@@ -5,6 +6,7 @@ import "./Checkout.css";
 function Checkout() {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasPreviousOrder, setHasPreviousOrder] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,17 +46,15 @@ function Checkout() {
         }
 
         setLoading(false);
-
         return;
       }
 
       try {
         const response = await fetch(
-`https://zyora-backend-rhv6.onrender.com/api/cart/${userId}`,
+          `https://zyora-backend-rhv6.onrender.com/api/cart/${userId}`
         );
 
         const data = await response.json();
-
         setCart(data);
       } catch (error) {
         console.log("Error fetching cart:", error);
@@ -69,6 +69,39 @@ function Checkout() {
       setLoading(false);
     }
   }, [userId, isBuyNow]);
+
+  // Check whether the customer has placed a previous non-cancelled order
+  useEffect(() => {
+    const fetchPreviousOrders = async () => {
+      if (!userId) {
+        setHasPreviousOrder(null);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `https://zyora-backend-rhv6.onrender.com/api/orders/${userId}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Could not fetch previous orders");
+        }
+
+        const orders = await response.json();
+
+        const previousOrder = orders.some(
+          (order) => order.orderStatus !== "Cancelled"
+        );
+
+        setHasPreviousOrder(previousOrder);
+      } catch (error) {
+        console.log("Error checking previous orders:", error);
+        setHasPreviousOrder(null);
+      }
+    };
+
+    fetchPreviousOrders();
+  }, [userId]);
 
   if (loading) {
     return (
@@ -98,10 +131,19 @@ function Checkout() {
     return total + item.productId.price * item.quantity;
   }, 0);
 
+  const discount =
+    hasPreviousOrder === false
+      ? Math.round(subtotal * 10) / 100
+      : 0;
+
+  const finalTotal = Math.max(
+    0,
+    Math.round((subtotal - discount) * 100) / 100
+  );
+
   const handleConfirmAddress = () => {
     if (!name || !phone || !address || !city || !state || !pincode) {
       alert("Please fill all delivery address fields");
-
       return;
     }
 
@@ -110,13 +152,11 @@ function Checkout() {
 
     if (!phonePattern.test(phone)) {
       alert("Phone number must contain exactly 10 digits");
-
       return;
     }
 
     if (!pincodePattern.test(pincode)) {
       alert("Pincode must contain exactly 6 digits");
-
       return;
     }
 
@@ -130,7 +170,11 @@ function Checkout() {
   const handlePlaceOrder = async () => {
     if (!addressConfirmed) {
       alert("Please confirm your delivery address first");
+      return;
+    }
 
+    if (hasPreviousOrder === null) {
+      alert("Please wait while we check your first-order discount.");
       return;
     }
 
@@ -152,7 +196,7 @@ function Checkout() {
         price: item.productId.price,
       })),
 
-      totalAmount: subtotal,
+      totalAmount: finalTotal,
 
       paymentMethod: paymentMethod,
 
@@ -160,20 +204,27 @@ function Checkout() {
     };
 
     try {
-const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders", {        
-    method: "POST",
+      const response = await fetch(
+        "https://zyora-backend-rhv6.onrender.com/api/orders",
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-        body: JSON.stringify(orderData),
-      });
+          body: JSON.stringify(orderData),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         console.log("Order saved:", data);
+
+        if (data.discountApplied) {
+          console.log("First-order discount:", data.discount);
+        }
 
         window.dispatchEvent(new Event("cartUpdated"));
 
@@ -187,6 +238,7 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders
       }
     } catch (error) {
       console.log("Order Error:", error);
+      alert("Unable to place your order. Please try again.");
     }
   };
 
@@ -229,7 +281,6 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders
                   disabled={addressConfirmed}
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, "");
-
                     setPhone(value);
                   }}
                 />
@@ -268,7 +319,6 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders
                   disabled={addressConfirmed}
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, "");
-
                     setPincode(value);
                   }}
                 />
@@ -309,7 +359,6 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders
 
                 <div>
                   <strong>Cash on Delivery</strong>
-
                   <p>Pay when your order arrives.</p>
                 </div>
               </div>
@@ -321,32 +370,33 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders
 
             <div className="checkout-products">
               {cart.items.map((item) => (
-                <div className="checkout-product" key={item.productId._id}>
-
-                <img
-  src={
-    item.productId.image?.startsWith("http")
-      ? item.productId.image
-      : `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`
-  }
-  alt={item.productId.productName}
-  onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
-  }}
-/>
+                <div
+                  className="checkout-product"
+                  key={item.productId._id}
+                >
+                  <img
+                    src={
+                      item.productId.image?.startsWith("http")
+                        ? item.productId.image
+                        : `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`
+                    }
+                    alt={item.productId.productName}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `https://zyora-backend-rhv6.onrender.com/productimage/${item.productId.image}`;
+                    }}
+                  />
 
                   <div>
                     <h3>{item.productId.productName}</h3>
-
                     <p>Qty: {item.quantity}</p>
                   </div>
 
                   <strong>
                     ₹
-                    {(item.productId.price * item.quantity).toLocaleString(
-                      "en-IN",
-                    )}
+                    {(
+                      item.productId.price * item.quantity
+                    ).toLocaleString("en-IN")}
                   </strong>
                 </div>
               ))}
@@ -354,13 +404,33 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders
 
             <div className="summary-row">
               <span>Subtotal</span>
-
               <span>₹{subtotal.toLocaleString("en-IN")}</span>
             </div>
 
+            {hasPreviousOrder === false && (
+              <div className="summary-row first-order-discount">
+                <span>First-order discount (10%)</span>
+                <span>
+                  −₹{discount.toLocaleString("en-IN")}
+                </span>
+              </div>
+            )}
+
+            {hasPreviousOrder === true && (
+              <div className="summary-row">
+                <span>First-order offer</span>
+                <span>Already used</span>
+              </div>
+            )}
+
+            {hasPreviousOrder === null && (
+              <div className="summary-row">
+                <span>Checking first-order offer...</span>
+              </div>
+            )}
+
             <div className="summary-row">
               <span>Delivery</span>
-
               <span>Free</span>
             </div>
 
@@ -368,11 +438,15 @@ const response = await fetch("https://zyora-backend-rhv6.onrender.com/api/orders
 
             <div className="summary-total">
               <span>Total</span>
-
-              <strong>₹{subtotal.toLocaleString("en-IN")}</strong>
+              <strong>
+                ₹{finalTotal.toLocaleString("en-IN")}
+              </strong>
             </div>
 
-            <button className="place-order-btn" onClick={handlePlaceOrder}>
+            <button
+              className="place-order-btn"
+              onClick={handlePlaceOrder}
+            >
               Place Order
             </button>
 
