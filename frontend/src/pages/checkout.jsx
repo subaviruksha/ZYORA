@@ -7,6 +7,7 @@ function Checkout() {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hasPreviousOrder, setHasPreviousOrder] = useState(null);
+  const [previousOrdersCount, setPreviousOrdersCount] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,11 +71,12 @@ function Checkout() {
     }
   }, [userId, isBuyNow]);
 
-  // Check previous orders for first-order eligibility
+  // Check previous non-cancelled orders
   useEffect(() => {
     const fetchPreviousOrders = async () => {
       if (!userId) {
         setHasPreviousOrder(null);
+        setPreviousOrdersCount(null);
         return;
       }
 
@@ -89,14 +91,16 @@ function Checkout() {
 
         const orders = await response.json();
 
-        const previousOrder = orders.some(
+        const validOrders = orders.filter(
           (order) => order.orderStatus !== "Cancelled"
         );
 
-        setHasPreviousOrder(previousOrder);
+        setPreviousOrdersCount(validOrders.length);
+        setHasPreviousOrder(validOrders.length > 0);
       } catch (error) {
         console.log("Error checking previous orders:", error);
         setHasPreviousOrder(null);
+        setPreviousOrdersCount(null);
       }
     };
 
@@ -130,10 +134,18 @@ function Checkout() {
     return total + item.productId.price * item.quantity;
   }, 0);
 
-  const discount =
-    hasPreviousOrder === false
-      ? Math.round(subtotal * 10) / 100
-      : 0;
+  // Calculate the discount for the upcoming order
+  let discount = 0;
+
+  if (previousOrdersCount === 0) {
+    discount = Math.round(subtotal * 10) / 100;
+  } else if (
+    previousOrdersCount !== null &&
+    previousOrdersCount >= 2 &&
+    previousOrdersCount % 2 === 0
+  ) {
+    discount = Math.round(subtotal * 5) / 100;
+  }
 
   const finalTotal = Math.max(
     0,
@@ -178,8 +190,8 @@ function Checkout() {
       return;
     }
 
-    if (hasPreviousOrder === null) {
-      alert("Please wait while we check your first-order discount.");
+    if (previousOrdersCount === null) {
+      alert("Please wait while we check your order discount.");
       return;
     }
 
@@ -224,7 +236,7 @@ function Checkout() {
         console.log("Order saved:", data);
 
         if (data.discountApplied) {
-          console.log("First-order discount:", data.discount);
+          console.log("Discount applied:", data.discount);
         }
 
         window.dispatchEvent(new Event("cartUpdated"));
@@ -406,8 +418,8 @@ function Checkout() {
               <span>₹{subtotal.toLocaleString("en-IN")}</span>
             </div>
 
-            {/* Attractive first-order discount card */}
-            {hasPreviousOrder === false && (
+            {/* First-order discount card */}
+            {previousOrdersCount === 0 && (
               <div className="first-order-gift-card">
                 <div className="gift-card-top">
                   <div className="gift-icon">🎁</div>
@@ -435,29 +447,82 @@ function Checkout() {
 
                 <div className="gift-card-savings">
                   <span>You save</span>
-
                   <strong>₹{formatPrice(discount)}</strong>
                 </div>
               </div>
             )}
 
-            {hasPreviousOrder === false && (
+            {/* Discount card for third, fifth, seventh orders, etc. */}
+            {previousOrdersCount !== null &&
+              previousOrdersCount >= 2 &&
+              previousOrdersCount % 2 === 0 && (
+                <div className="first-order-gift-card">
+                  <div className="gift-card-top">
+                    <div className="gift-icon">🎁</div>
+
+                    <div className="gift-card-heading">
+                      <span className="gift-welcome">
+                        THANK YOU FOR SHOPPING WITH ZYORA
+                      </span>
+
+                      <h3>A Special Reward for You!</h3>
+
+                      <p>
+                        Enjoy a special discount on this order.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="gift-card-bottom">
+                    <span className="gift-offer-label">
+                      REPEAT CUSTOMER OFFER
+                    </span>
+
+                    <span className="gift-offer-badge">5% OFF</span>
+                  </div>
+
+                  <div className="gift-card-savings">
+                    <span>You save</span>
+                    <strong>₹{formatPrice(discount)}</strong>
+                  </div>
+                </div>
+              )}
+
+            {previousOrdersCount === 0 && (
               <div className="summary-row first-order-discount">
                 <span>First-order discount (10%)</span>
                 <span>-₹{formatPrice(discount)}</span>
               </div>
             )}
 
-            {hasPreviousOrder === true && (
+            {previousOrdersCount !== null &&
+              previousOrdersCount >= 2 &&
+              previousOrdersCount % 2 === 0 && (
+                <div className="summary-row first-order-discount">
+                  <span>Repeat-order discount (5%)</span>
+                  <span>-₹{formatPrice(discount)}</span>
+                </div>
+              )}
+
+            {previousOrdersCount === 1 && (
               <div className="summary-row">
-                <span>First-order offer</span>
-                <span>Already used</span>
+                <span>Second-order offer</span>
+                <span>No discount</span>
               </div>
             )}
 
-            {hasPreviousOrder === null && (
+            {previousOrdersCount !== null &&
+              previousOrdersCount >= 3 &&
+              previousOrdersCount % 2 !== 0 && (
+                <div className="summary-row">
+                  <span>Order offer</span>
+                  <span>No discount</span>
+                </div>
+              )}
+
+            {previousOrdersCount === null && (
               <div className="summary-row">
-                <span>Checking first-order offer...</span>
+                <span>Checking order discount...</span>
               </div>
             )}
 
