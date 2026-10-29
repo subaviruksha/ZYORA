@@ -43,9 +43,13 @@ function App() {
     <BrowserRouter>
     <ScrollToTop />
       {isLoggedIn && role === "user" && <Navbar />}
-
+      
+      
+        
       <Routes>
         {/* Login */}
+         
+       
 
         <Route
           path="/login"
@@ -64,6 +68,8 @@ function App() {
           <>
             <Route path="/" element={<Home />} />
 
+            
+             
             <Route path="/products" element={<Products />} />
 
             <Route path="/categories" element={<Categories />} />

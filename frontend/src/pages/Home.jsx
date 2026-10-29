@@ -13,9 +13,9 @@ function Home() {
           <p className="small-title">WELCOME TO ZYORA</p>
 
           <h1>
-            Shop Smart.
+            More Shopping.
             <br />
-            Shop Better.
+            <span>More Savings.</span>
           </h1>
 
           <p className="hero-text">
@@ -23,17 +23,63 @@ function Home() {
             place.
           </p>
 
-          <Link to="/products">
-            <button className="shop-btn">Shop Now</button>
+          {/* Discount Offers */}
+          <div className="hero-discount">
+            <div className="hero-discount-card">
+              <span className="hero-discount-percent">10%</span>
+              <strong>OFF</strong>
+              <p>Your First Order</p>
+            </div>
+
+            <div className="hero-discount-card">
+              <span className="hero-discount-percent">5%</span>
+              <strong>OFF</strong>
+              <p>On Your 3rd, 5th, 7th Order & More</p>
+            </div>
+          </div>
+
+          <Link to="/products" className="hero-shop-link">
+            <button className="shop-btn">Shop Now →</button>
           </Link>
+
+          <p className="hero-note">
+            *Discounts apply to eligible orders at checkout.
+          </p>
         </div>
 
+        {/* Multi-category Product Display */}
         <div className="hero-image">
-          <img
-            className="heropicinsert"
-            src={heroImage}
-            alt="ZYORA Shopping"
-          />
+          <div className="hero-product-grid">
+            <div className="hero-product">
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772312/iphone15.jpg"
+                alt="iPhone"
+              />
+            </div>
+
+            <div className="hero-product">
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772292/HP-pavilion-14.webp"
+                alt="Laptop"
+              />
+            </div>
+
+            <div className="hero-product">
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772277/galaxy-buds-3.webp"
+                alt="Wireless earbuds"
+              />
+            </div>
+
+            <div className="hero-product">
+              <img
+                src="https://res.cloudinary.com/dssvlyx0/image/upload/v1792772348/floral-kurti.jpg"
+                alt="Fashion"
+              />
+            </div>
+
+            
+          </div>
         </div>
       </section>
 
@@ -54,7 +100,6 @@ function Home() {
               </div>
 
               <h3>Mobiles</h3>
-
               <p>Smartphones & accessories</p>
             </div>
           </Link>
@@ -69,7 +114,6 @@ function Home() {
               </div>
 
               <h3>Laptops</h3>
-
               <p>Laptops & computers</p>
             </div>
           </Link>
@@ -84,7 +128,6 @@ function Home() {
               </div>
 
               <h3>Electronics</h3>
-
               <p>Gadgets & accessories</p>
             </div>
           </Link>
@@ -99,7 +142,6 @@ function Home() {
               </div>
 
               <h3>Fashion</h3>
-
               <p>Clothing & accessories</p>
             </div>
           </Link>
@@ -126,9 +168,7 @@ function Home() {
               </div>
 
               <h3>iPhone 15</h3>
-
               <p>Latest Apple smartphone</p>
-
               <strong>₹69,999</strong>
             </div>
           </Link>
@@ -146,9 +186,7 @@ function Home() {
               </div>
 
               <h3>HP Laptop</h3>
-
               <p>Powerful everyday laptop</p>
-
               <strong>₹55,999</strong>
             </div>
           </Link>
@@ -166,9 +204,7 @@ function Home() {
               </div>
 
               <h3>JBL Speaker</h3>
-
               <p>Premium sound quality</p>
-
               <strong>₹2,999</strong>
             </div>
           </Link>
@@ -186,9 +222,7 @@ function Home() {
               </div>
 
               <h3>Smart Watch</h3>
-
               <p>Smart and stylish</p>
-
               <strong>₹4,999</strong>
             </div>
           </Link>
@@ -204,25 +238,19 @@ function Home() {
         <div className="why-container">
           <div className="why-card">
             <span>🚚</span>
-
             <h3>Fast Delivery</h3>
-
             <p>Quick and reliable delivery.</p>
           </div>
 
           <div className="why-card">
             <span>🔒</span>
-
             <h3>Secure Shopping</h3>
-
             <p>Your information stays protected.</p>
           </div>
 
           <div className="why-card">
             <span>↩️</span>
-
             <h3>Easy Returns</h3>
-
             <p>Simple and hassle-free returns.</p>
           </div>
         </div>
