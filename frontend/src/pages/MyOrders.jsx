@@ -127,23 +127,39 @@ function MyOrders() {
 
                 {discount > 0 && (
                   <div className="first-order-offer">
-                    <div>
-                      🎉{" "}
-                      {discountPercentage === 10
-                        ? "First Order Discount Applied!"
-                        : discountPercentage === 5
-                        ? "Repeat Customer Discount Applied!"
-                        : "Special Discount Applied!"}
-                    </div>
+                    {isCancelled ? (
+                      <>
+                        <div>
+                          ❌ Discount Removed – Order Cancelled
+                        </div>
 
-                    <p>
-                      {discountPercentage === 10
-                        ? "You received 10% off your first order."
-                        : discountPercentage === 5
-                        ? "Thank you for shopping again with ZYORA! You received 5% off."
-                        : `You received a ${discountPercentage}% discount.`}
-                      {" "}You saved ₹{formatPrice(discount)}!
-                    </p>
+                        <p>
+                          Your {discountPercentage}% discount of ₹
+                          {formatPrice(discount)} is no longer applicable
+                          because this order was cancelled.
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <div>
+                          🎉{" "}
+                          {discountPercentage === 10
+                            ? "First Order Discount Applied!"
+                            : discountPercentage === 5
+                            ? "Repeat Customer Discount Applied!"
+                            : "Special Discount Applied!"}
+                        </div>
+
+                        <p>
+                          {discountPercentage === 10
+                            ? "You received 10% off your first order."
+                            : discountPercentage === 5
+                            ? "Thank you for shopping again with ZYORA! You received 5% off."
+                            : `You received a ${discountPercentage}% discount.`}
+                          {" "}You saved ₹{formatPrice(discount)}!
+                        </p>
+                      </>
+                    )}
                   </div>
                 )}
 
@@ -202,20 +218,31 @@ function MyOrders() {
                       <>
                         <div className="order-price-row">
                           <span>Original Amount</span>
-                          <strong>₹{formatPrice(originalAmount)}</strong>
+                          <strong>
+                            ₹{formatPrice(originalAmount)}
+                          </strong>
                         </div>
 
                         <div className="order-price-row first-order-discount">
                           <span>
-                            Discount ({discountPercentage}%)
+                            {isCancelled
+                              ? `Discount Removed (${discountPercentage}%)`
+                              : `Discount (${discountPercentage}%)`}
                           </span>
 
-                          <strong>−₹{formatPrice(discount)}</strong>
+                          <strong>
+                            {isCancelled
+                              ? `₹${formatPrice(discount)} (Removed)`
+                              : `−₹${formatPrice(discount)}`}
+                          </strong>
                         </div>
                       </>
                     )}
 
-                    <span>Total</span>
+                    <span>
+                      {isCancelled ? "Original Order Total" : "Total"}
+                    </span>
+
                     <strong>₹{formatPrice(totalAmount)}</strong>
                   </div>
                 </div>

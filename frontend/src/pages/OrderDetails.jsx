@@ -118,6 +118,8 @@ function OrderDetails() {
       ? Math.round((discount / originalAmount) * 100)
       : 0;
 
+  const isCancelled = order.orderStatus === "Cancelled";
+
   const trackingSteps = [
     "Pending",
     "Processing",
@@ -159,9 +161,7 @@ function OrderDetails() {
 
             <div
               className={`details-status ${
-                order.orderStatus === "Cancelled"
-                  ? "cancelled-status"
-                  : ""
+                isCancelled ? "cancelled-status" : ""
               }`}
             >
               {order.orderStatus}
@@ -188,7 +188,7 @@ function OrderDetails() {
             </button>
           )}
 
-          {order.orderStatus === "Cancelled" && (
+          {isCancelled && (
             <p className="cancelled-message">
               This order has been cancelled.
             </p>
@@ -198,7 +198,7 @@ function OrderDetails() {
         <div className="details-section order-tracking-section">
           <h2>Order Tracking</h2>
 
-          {order.orderStatus === "Cancelled" ? (
+          {isCancelled ? (
             <p className="cancelled-message">
               This order was cancelled and will not proceed further.
             </p>
@@ -317,15 +317,23 @@ function OrderDetails() {
           {discount > 0 && (
             <div className="summary-line">
               <span>
-                {discountPercentage === 10
+                {isCancelled
+                  ? `Discount Removed (${discountPercentage}%)`
+                  : discountPercentage === 10
                   ? "First Order Discount (10%)"
                   : discountPercentage === 5
                   ? "Repeat Customer Discount (5%)"
                   : `Discount (${discountPercentage}%)`}
               </span>
 
-              <span style={{ color: "green" }}>
-                -₹{formatPrice(discount)}
+              <span
+                style={{
+                  color: isCancelled ? "red" : "green",
+                }}
+              >
+                {isCancelled
+                  ? `₹${formatPrice(discount)} (Removed)`
+                  : `-₹${formatPrice(discount)}`}
               </span>
             </div>
           )}
@@ -338,13 +346,22 @@ function OrderDetails() {
           <div className="summary-divider"></div>
 
           <div className="summary-total-line">
-            <strong>Total Amount</strong>
+            <strong>
+              {isCancelled ? "Original Order Total" : "Total Amount"}
+            </strong>
             <strong>₹{formatPrice(totalAmount)}</strong>
           </div>
 
           {discount > 0 && (
-            <p className="cancelled-message">
-              You saved ₹{formatPrice(discount)} on this order!
+            <p
+              className="cancelled-message"
+              style={{
+                color: isCancelled ? "red" : "green",
+              }}
+            >
+              {isCancelled
+                ? `Discount Removed – Order Cancelled. Your ${discountPercentage}% discount of ₹${formatPrice(discount)} is no longer applicable.`
+                : `You saved ₹${formatPrice(discount)} on this order!`}
             </p>
           )}
         </div>
