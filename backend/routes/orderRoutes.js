@@ -63,16 +63,23 @@ router.post("/", async (req, res) => {
 
         calculatedTotal = Math.round(calculatedTotal * 100) / 100;
 
-        // Check for a previous non-cancelled order
-        const previousOrder = await Order.findOne({
+        // Count previous non-cancelled orders
+        const previousOrdersCount = await Order.countDocuments({
             userId,
             orderStatus: { $ne: "Cancelled" }
         });
 
-        // Apply 10% discount to the first order
-        const discount = previousOrder
-            ? 0
-            : Math.round(calculatedTotal * 10) / 100;
+        let discount = 0;
+
+        // First order: 10% discount
+        if (previousOrdersCount === 0) {
+            discount = Math.round(calculatedTotal * 10) / 100;
+        }
+
+        // 3rd, 5th, 7th orders, etc.: 5% discount
+        else if (previousOrdersCount % 2 === 0) {
+            discount = Math.round(calculatedTotal * 5) / 100;
+        }
 
         const finalAmount = Math.max(
             0,
@@ -125,7 +132,7 @@ router.post("/", async (req, res) => {
             order,
             originalAmount: calculatedTotal,
             discount,
-            discountApplied: !previousOrder
+            discountApplied: discount > 0
         });
 
     } catch (error) {
