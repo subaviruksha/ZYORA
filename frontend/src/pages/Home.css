@@ -58,7 +58,7 @@
     max-width: 470px;
 }
 
-/* Discount Cards */
+/* Discount Card - 10% First Order */
 
 .hero-discount {
     display: flex;
@@ -69,9 +69,10 @@
 }
 
 .hero-discount-card {
-    flex: 1;
-    min-width: 125px;
-    padding: 18px 15px;
+    flex: 0 0 190px;
+    width: 190px;
+    min-width: 190px;
+    padding: 18px 20px;
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.88);
     border: 1px solid #ded0ff;
@@ -186,8 +187,6 @@
     padding: 12px;
     box-sizing: border-box;
 }
-
-
 
 /* Common Sections */
 
@@ -433,8 +432,9 @@
     }
 
     .hero-discount-card {
-        flex: 1;
-        min-width: 0;
+        flex: 0 0 190px;
+        width: 190px;
+        min-width: 190px;
         padding: 15px 12px;
     }
 

@@ -6,7 +6,6 @@ import "./Checkout.css";
 function Checkout() {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [hasPreviousOrder, setHasPreviousOrder] = useState(null);
   const [previousOrdersCount, setPreviousOrdersCount] = useState(null);
 
   const navigate = useNavigate();
@@ -71,11 +70,10 @@ function Checkout() {
     }
   }, [userId, isBuyNow]);
 
-  // Check previous non-cancelled orders
+  // Check previous non-cancelled orders for first-order offer
   useEffect(() => {
     const fetchPreviousOrders = async () => {
       if (!userId) {
-        setHasPreviousOrder(null);
         setPreviousOrdersCount(null);
         return;
       }
@@ -96,10 +94,8 @@ function Checkout() {
         );
 
         setPreviousOrdersCount(validOrders.length);
-        setHasPreviousOrder(validOrders.length > 0);
       } catch (error) {
         console.log("Error checking previous orders:", error);
-        setHasPreviousOrder(null);
         setPreviousOrdersCount(null);
       }
     };
@@ -134,17 +130,11 @@ function Checkout() {
     return total + item.productId.price * item.quantity;
   }, 0);
 
-  // Calculate the discount for the upcoming order
+  // First-order discount: 10% only
   let discount = 0;
 
   if (previousOrdersCount === 0) {
     discount = Math.round(subtotal * 10) / 100;
-  } else if (
-    previousOrdersCount !== null &&
-    previousOrdersCount >= 2 &&
-    previousOrdersCount % 2 === 0
-  ) {
-    discount = Math.round(subtotal * 5) / 100;
   }
 
   const finalTotal = Math.max(
@@ -191,7 +181,7 @@ function Checkout() {
     }
 
     if (previousOrdersCount === null) {
-      alert("Please wait while we check your order discount.");
+      alert("Please wait while we check your first-order offer.");
       return;
     }
 
@@ -452,42 +442,6 @@ function Checkout() {
               </div>
             )}
 
-            {/* Discount card for third, fifth, seventh orders, etc. */}
-            {previousOrdersCount !== null &&
-              previousOrdersCount >= 2 &&
-              previousOrdersCount % 2 === 0 && (
-                <div className="first-order-gift-card">
-                  <div className="gift-card-top">
-                    <div className="gift-icon">🎁</div>
-
-                    <div className="gift-card-heading">
-                      <span className="gift-welcome">
-                        THANK YOU FOR SHOPPING WITH ZYORA
-                      </span>
-
-                      <h3>A Special Reward for You!</h3>
-
-                      <p>
-                        Enjoy a special discount on this order.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="gift-card-bottom">
-                    <span className="gift-offer-label">
-                      REPEAT CUSTOMER OFFER
-                    </span>
-
-                    <span className="gift-offer-badge">5% OFF</span>
-                  </div>
-
-                  <div className="gift-card-savings">
-                    <span>You save</span>
-                    <strong>₹{formatPrice(discount)}</strong>
-                  </div>
-                </div>
-              )}
-
             {previousOrdersCount === 0 && (
               <div className="summary-row first-order-discount">
                 <span>First-order discount (10%)</span>
@@ -496,24 +450,7 @@ function Checkout() {
             )}
 
             {previousOrdersCount !== null &&
-              previousOrdersCount >= 2 &&
-              previousOrdersCount % 2 === 0 && (
-                <div className="summary-row first-order-discount">
-                  <span>Repeat-order discount (5%)</span>
-                  <span>-₹{formatPrice(discount)}</span>
-                </div>
-              )}
-
-            {previousOrdersCount === 1 && (
-              <div className="summary-row">
-                <span>Second-order offer</span>
-                <span>No discount</span>
-              </div>
-            )}
-
-            {previousOrdersCount !== null &&
-              previousOrdersCount >= 3 &&
-              previousOrdersCount % 2 !== 0 && (
+              previousOrdersCount > 0 && (
                 <div className="summary-row">
                   <span>Order offer</span>
                   <span>No discount</span>
@@ -522,7 +459,7 @@ function Checkout() {
 
             {previousOrdersCount === null && (
               <div className="summary-row">
-                <span>Checking order discount...</span>
+                <span>Checking first-order offer...</span>
               </div>
             )}
 

@@ -22,18 +22,12 @@ function Home() {
             place.
           </p>
 
-          {/* Discount Offers */}
+          {/* Discount Offer */}
           <div className="hero-discount">
             <div className="hero-discount-card">
               <span className="hero-discount-percent">10%</span>
               <strong>OFF</strong>
               <p>Your First Order</p>
-            </div>
-
-            <div className="hero-discount-card">
-              <span className="hero-discount-percent">5%</span>
-              <strong>OFF</strong>
-              <p>On Your 3rd, 5th, 7th Order & More</p>
             </div>
           </div>
 
@@ -76,8 +70,6 @@ function Home() {
                 alt="Fashion"
               />
             </div>
-
-            
           </div>
         </div>
       </section>

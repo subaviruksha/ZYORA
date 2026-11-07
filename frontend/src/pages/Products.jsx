@@ -28,7 +28,8 @@ function Products() {
       setSelectedCategories(
         selectedCategories.filter((item) => item !== category),
       );
-    } else {
+    } 
+    else {
       setSelectedCategories([...selectedCategories, category]);
     }
   };
@@ -218,7 +219,8 @@ function Products() {
   src={
     product.image?.startsWith("http")
       ? product.image
-      : `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`
+      : 
+      `https://zyora-backend-rhv6.onrender.com/productimage/${product.image}`
   }
   alt={product.productName}
   onError={(e) => {

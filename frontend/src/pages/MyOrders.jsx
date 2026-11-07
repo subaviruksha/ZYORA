@@ -101,6 +101,9 @@ function MyOrders() {
                 ? Math.round((discount / originalAmount) * 100)
                 : 0;
 
+            const isFirstOrderDiscount =
+              discount > 0 && discountPercentage === 10;
+
             const isCancelled = order.orderStatus === "Cancelled";
 
             return (
@@ -125,7 +128,7 @@ function MyOrders() {
                   {new Date(order.createdAt).toLocaleDateString("en-IN")}
                 </div>
 
-                {discount > 0 && (
+                {isFirstOrderDiscount && (
                   <div className="first-order-offer">
                     {isCancelled ? (
                       <>
@@ -134,7 +137,7 @@ function MyOrders() {
                         </div>
 
                         <p>
-                          Your {discountPercentage}% discount of ₹
+                          Your first-order discount of ₹
                           {formatPrice(discount)} is no longer applicable
                           because this order was cancelled.
                         </p>
@@ -142,21 +145,12 @@ function MyOrders() {
                     ) : (
                       <>
                         <div>
-                          🎉{" "}
-                          {discountPercentage === 10
-                            ? "First Order Discount Applied!"
-                            : discountPercentage === 5
-                            ? "Repeat Customer Discount Applied!"
-                            : "Special Discount Applied!"}
+                          🎉 First Order Discount Applied!
                         </div>
 
                         <p>
-                          {discountPercentage === 10
-                            ? "You received 10% off your first order."
-                            : discountPercentage === 5
-                            ? "Thank you for shopping again with ZYORA! You received 5% off."
-                            : `You received a ${discountPercentage}% discount.`}
-                          {" "}You saved ₹{formatPrice(discount)}!
+                          You received 10% off your first order. You saved ₹
+                          {formatPrice(discount)}!
                         </p>
                       </>
                     )}
@@ -218,6 +212,7 @@ function MyOrders() {
                       <>
                         <div className="order-price-row">
                           <span>Original Amount</span>
+
                           <strong>
                             ₹{formatPrice(originalAmount)}
                           </strong>
@@ -226,8 +221,10 @@ function MyOrders() {
                         <div className="order-price-row first-order-discount">
                           <span>
                             {isCancelled
-                              ? `Discount Removed (${discountPercentage}%)`
-                              : `Discount (${discountPercentage}%)`}
+                              ? "Discount Removed"
+                              : isFirstOrderDiscount
+                              ? "First Order Discount (10%)"
+                              : "Previous Discount"}
                           </span>
 
                           <strong>
