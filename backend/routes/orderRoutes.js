@@ -69,19 +69,14 @@ router.post("/", async (req, res) => {
             orderStatus: { $ne: "Cancelled" }
         });
 
+        // Apply 10% discount only on the first order
         let discount = 0;
 
-        // First order: 10% discount
         if (previousOrdersCount === 0) {
             discount = Math.round(calculatedTotal * 10) / 100;
         }
-        // Third, fifth, seventh, ninth orders, etc.: 5% discount
-        else if (
-            previousOrdersCount >= 2 &&
-            previousOrdersCount % 2 === 0
-        ) {
-            discount = Math.round(calculatedTotal * 5) / 100;
-        }
+
+        // No discount on second or subsequent orders
 
         // Calculate final amount
         const finalAmount = Math.max(
