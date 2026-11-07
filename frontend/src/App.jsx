@@ -1,7 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation
+} from "react-router-dom";
+
+import { useEffect, useState } from "react";
+
 import Navbar from "./components/Navbar";
+import LoadingPage from "./pages/LoadingPage";
+
 import Checkout from "./pages/checkout";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -15,6 +25,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
 import OrderDetails from "./pages/OrderDetails";
 import Account from "./pages/Account";
+
 import AdminUsers from "./admin/AdminUsers";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminProducts from "./admin/AdminProducts";
@@ -23,39 +34,55 @@ import AdminOrders from "./admin/AdminOrders";
 import AdminAccount from "./admin/AdminAccount";
 import AdminAddProduct from "./admin/AdminAddProduct";
 import CancelledOrders from "./admin/Cancelledorders";
+
 function ScrollToTop() {
-    const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
-    return null;
+  return null;
 }
 
 function App() {
-//  checks the details in localStorage
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1800);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const isLoggedIn =
+    localStorage.getItem("isLoggedIn") === "true";
 
   const role = localStorage.getItem("role");
 
+  if (loading) {
+    return <LoadingPage />;
+  }
+
   return (
     <BrowserRouter>
-    <ScrollToTop />
+      <ScrollToTop />
+
       {isLoggedIn && role === "user" && <Navbar />}
-      
-      
-        
+
       <Routes>
-        {/* Login */}
-         
-       
+
+        {/* LOGIN */}
 
         <Route
           path="/login"
           element={
             isLoggedIn ? (
-              <Navigate to={role === "admin" ? "/admin" : "/"} replace />
+              <Navigate
+                to={role === "admin" ? "/admin" : "/"}
+                replace
+              />
             ) : (
               <Login />
             )
@@ -68,8 +95,6 @@ function App() {
           <>
             <Route path="/" element={<Home />} />
 
-            
-             
             <Route path="/products" element={<Products />} />
 
             <Route path="/categories" element={<Categories />} />
@@ -80,61 +105,98 @@ function App() {
 
             <Route path="/checkout" element={<Checkout />} />
 
-            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route
+              path="/products/:id"
+              element={<ProductDetails />}
+            />
 
-            <Route path="/order-success" element={<OrderSuccess />} />
+            <Route
+              path="/order-success"
+              element={<OrderSuccess />}
+            />
 
-            <Route path="/category/:category" element={<CategoryProducts />} />
+            <Route
+              path="/category/:category"
+              element={<CategoryProducts />}
+            />
 
             <Route path="/orders" element={<MyOrders />} />
 
-            <Route path="/orders/:id" element={<OrderDetails />} />
+            <Route
+              path="/orders/:id"
+              element={<OrderDetails />}
+            />
 
             <Route path="/account" element={<Account />} />
-                wrong url direct to home page 
-            <Route path="*" element={<Navigate to="/" replace />} />
+
+            {/* Wrong URL redirects to home */}
+            <Route
+              path="*"
+              element={<Navigate to="/" replace />}
+            />
           </>
         )}
 
-     
-{/* ADMIN ROUTES */}
+        {/* ADMIN ROUTES */}
 
-{isLoggedIn && role === "admin" && (
-  <>
-    <Route path="/admin" element={<AdminDashboard />} />
+        {isLoggedIn && role === "admin" && (
+          <>
+            <Route
+              path="/admin"
+              element={<AdminDashboard />}
+            />
 
-    <Route path="/admin/products" element={<AdminProducts />} />
+            <Route
+              path="/admin/products"
+              element={<AdminProducts />}
+            />
 
-    <Route
-      path="/admin/products/edit/:id"
-      element={<AdminEditProducts />}
-    />
+            <Route
+              path="/admin/products/edit/:id"
+              element={<AdminEditProducts />}
+            />
 
-    <Route path="/admin/orders" element={<AdminOrders />} />
+            <Route
+              path="/admin/orders"
+              element={<AdminOrders />}
+            />
 
-    <Route path="/admin/users" element={<AdminUsers />} />
+            <Route
+              path="/admin/users"
+              element={<AdminUsers />}
+            />
 
-    <Route path="/admin/account" element={<AdminAccount />} />
+            <Route
+              path="/admin/account"
+              element={<AdminAccount />}
+            />
 
-    <Route path="/admin/products/add" element={<AdminAddProduct />} />
+            <Route
+              path="/admin/products/add"
+              element={<AdminAddProduct />}
+            />
 
-    {/* Cancelled Orders page */}
-    <Route
-      path="/admin/cancelled-orders"
-      element={<CancelledOrders />}
-    />
+            <Route
+              path="/admin/cancelled-orders"
+              element={<CancelledOrders />}
+            />
 
-    {/* Keep wildcard route last */}
-    <Route path="*" element={<Navigate to="/admin" replace />} />
-  </>
-)}
-
+            <Route
+              path="*"
+              element={<Navigate to="/admin" replace />}
+            />
+          </>
+        )}
 
         {/* NOT LOGGED IN */}
-       {/* manual type of url without login redierct to home login */}
+
         {!isLoggedIn && (
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route
+            path="*"
+            element={<Navigate to="/login" replace />}
+          />
         )}
+
       </Routes>
     </BrowserRouter>
   );
